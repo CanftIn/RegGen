@@ -34,7 +34,7 @@ file(GLOB_RECURSE LIB_PATH
 list(APPEND RegGen_SRCS ${LIB_PATH})
 
 add_library(${STATIC_LIB_NAME} STATIC ${RegGen_SRCS})
-target_link_libraries(${STATIC_LIB_NAME})
+#target_link_libraries(${STATIC_LIB_NAME})
 
 if (REGGEN_OPT_BUILD_UNITTESTS)
   add_subdirectory(unittests #[[EXCLUDE_FROM_ALL]])
