@@ -1,2 +1,4 @@
-# tigerbook_exercise
-exercise of Modern Compiler Implementation in C book.
+# RegGen
+
+An experimental parser generator with regular expression and LALR(1) grammar.
+
