@@ -11,3 +11,4 @@ enable_testing()
 find_package(GTest REQUIRED CONFIG)
 
 add_subdirectory(Common)
+add_subdirectory(Lexer)

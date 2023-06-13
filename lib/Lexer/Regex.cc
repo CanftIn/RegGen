@@ -60,6 +60,7 @@ auto ParseCharClass(const char*& str) -> RegexExprPtr {
   std::optional<int> last_ch;
   std::vector<CharRange> ranges{};
 
+  // 0. parse character ranges
   while (*p && *p != ']') {
     if (last_ch) {
       // if a mark for range
@@ -101,21 +102,24 @@ auto ParseCharClass(const char*& str) -> RegexExprPtr {
 
   str = p;
   std::sort(ranges.begin(), ranges.end(),
-            [](auto lhs, auto rhs) { return lhs.End() < rhs.End(); });
+            [](auto lhs, auto rhs) { return lhs.Min() < rhs.Min(); });
 
+  // 1. merge ranges
   std::vector<CharRange> merged_ranges{ranges[0]};
   for (auto rg : ranges) {
     auto last_rg = merged_ranges.back();
     if (rg.Min() > last_rg.Min()) {
       merged_ranges.push_back(rg);
     } else {
-      auto new_end = last_rg.Min();
-      auto new_begin = std::max(rg.Max(), last_rg.Max());
+      auto new_min = last_rg.Min();
+      auto new_max = std::max(rg.Max(), last_rg.Max());
 
-      merged_ranges.back() = CharRange{new_begin, new_end};
+      CharRange new_range{new_min, new_max};
+      merged_ranges.push_back(new_range);
     }
   }
 
+  // 2. reverse ranges
   if (reverse) {
     std::vector<CharRange> reversed_ranges{};
     if (merged_ranges.front().Min() > 0) {

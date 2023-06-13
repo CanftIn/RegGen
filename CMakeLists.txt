@@ -30,6 +30,7 @@ set(STATIC_LIB_NAME ${PROJECT_NAME})
 
 file(GLOB_RECURSE LIB_PATH
     ./lib/Common/*.cc
+    ./lib/Lexer/*.cc
   )
 list(APPEND RegGen_SRCS ${LIB_PATH})
 

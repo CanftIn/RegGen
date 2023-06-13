@@ -94,9 +94,9 @@ class EntityExpr : public RegexExpr, public LabelExpr {
 
 class SequenceExpr : public RegexExpr {
  public:
-  explicit SequenceExpr(std::vector<RegexExprPtr> exprs)
+  explicit SequenceExpr(RegexExprVec exprs)
       : exprs_(std::move(exprs)) {
-    assert(!exprs.empty());
+    assert(!exprs_.empty());
   }
 
   auto Child() const -> const auto& { return exprs_; }
@@ -106,14 +106,14 @@ class SequenceExpr : public RegexExpr {
   }
 
  private:
-  std::vector<RegexExprPtr> exprs_;
+  RegexExprVec exprs_;
 };
 
 class ChoiceExpr : public RegexExpr {
  public:
-  explicit ChoiceExpr(std::vector<RegexExprPtr> exprs)
+  explicit ChoiceExpr(RegexExprVec exprs)
       : exprs_(std::move(exprs)) {
-    assert(!exprs.empty());
+    assert(!exprs_.empty());
   }
 
   auto Child() const -> const auto& { return exprs_; }
@@ -123,7 +123,7 @@ class ChoiceExpr : public RegexExpr {
   }
 
  private:
-  std::vector<RegexExprPtr> exprs_;
+  RegexExprVec exprs_;
 };
 
 class ClosureExpr : public RegexExpr {
