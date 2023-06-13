@@ -70,6 +70,50 @@ inline auto ConsumeIfAny(const char*& s, const char* pred) -> bool {
   return false;
 }
 
+class CharRange {
+ public:
+  CharRange(int begin, int end) : begin_(begin), end_(end) {}
+
+  explicit CharRange(int c) : CharRange(c, c) {}
+
+  auto Begin() const -> int { return begin_; }
+  auto End() const -> int { return end_; }
+
+  auto Length() const -> int { return end_ - begin_ + 1; }
+
+  auto Contain(int c) const -> bool { return begin_ <= c && c <= end_; }
+  auto Contain(CharRange cg) const -> bool {
+    return begin_ <= cg.begin_ && cg.end_ <= end_;
+  }
+
+ private:
+  int begin_;
+  int end_;
+};
+
+inline auto EscapeRawCharacter(int ch) -> int {
+  switch (ch) {
+    case 'a':
+      return '\a';
+    case 'b':
+      return '\b';
+    case 't':
+      return '\t';
+    case 'r':
+      return '\r';
+    case 'v':
+      return '\v';
+    case 'f':
+      return '\f';
+    case 'n':
+      return '\n';
+    default:
+      return ch;
+  }
+}
+
+inline auto IsEof(const char* s) -> bool { return *s == '\0'; }
+
 }  // namespace RG
 
 #endif  // REGGEN_COMMON_TEXT_H
