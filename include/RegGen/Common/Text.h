@@ -72,23 +72,21 @@ inline auto ConsumeIfAny(const char*& s, const char* pred) -> bool {
 
 class CharRange {
  public:
-  CharRange(int begin, int end) : begin_(begin), end_(end) {}
+  CharRange(int min, int max) : min_(min), max_(max) { assert(min <= max); }
+  explicit CharRange(int ch) : CharRange(ch, ch) {}
 
-  explicit CharRange(int c) : CharRange(c, c) {}
+  auto Min() const -> int { return min_; }
+  auto Max() const -> int { return max_; }
 
-  auto Begin() const -> int { return begin_; }
-  auto End() const -> int { return end_; }
+  auto Length() const -> int { return max_ - min_ + 1; }
 
-  auto Length() const -> int { return end_ - begin_ + 1; }
-
-  auto Contain(int c) const -> bool { return begin_ <= c && c <= end_; }
-  auto Contain(CharRange cg) const -> bool {
-    return begin_ <= cg.begin_ && cg.end_ <= end_;
+  auto Contain(int ch) const -> bool { return ch >= min_ && ch <= max_; }
+  auto Contain(CharRange rg) const -> bool {
+    return rg.min_ >= min_ && rg.max_ <= max_;
   }
 
  private:
-  int begin_;
-  int end_;
+  int min_, max_;
 };
 
 inline auto EscapeRawCharacter(int ch) -> int {

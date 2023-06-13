@@ -24,6 +24,11 @@ using RegexExprVec = std::vector<RegexExprPtr>;
 
 auto ParseRegex(const std::string& regex) -> std::unique_ptr<RootExpr>;
 
+// auto ParseRegexInternal(const char*& str, char term) -> RegexExprPtr;
+// auto ParseCharClass(const char*& str) -> RegexExprPtr;
+// auto ParseEscapedExpr(const char*& str) -> RegexExprPtr;
+// auto ParseCharacter(const char*& str) -> int;
+
 enum class RepetitionMode : uint8_t {
   Optional,
   Star,
@@ -89,7 +94,8 @@ class EntityExpr : public RegexExpr, public LabelExpr {
 
 class SequenceExpr : public RegexExpr {
  public:
-  SequenceExpr(std::vector<RegexExprPtr> exprs) : exprs_(std::move(exprs)) {
+  explicit SequenceExpr(std::vector<RegexExprPtr> exprs)
+      : exprs_(std::move(exprs)) {
     assert(!exprs.empty());
   }
 
@@ -105,7 +111,8 @@ class SequenceExpr : public RegexExpr {
 
 class ChoiceExpr : public RegexExpr {
  public:
-  ChoiceExpr(std::vector<RegexExprPtr> exprs) : exprs_(std::move(exprs)) {
+  explicit ChoiceExpr(std::vector<RegexExprPtr> exprs)
+      : exprs_(std::move(exprs)) {
     assert(!exprs.empty());
   }
 
