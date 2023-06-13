@@ -6,14 +6,10 @@
 #include <stdexcept>
 #include <string>
 
+#include "RegGen/Common/Error.h"
 #include "RegGen/Common/Text.h"
 
 namespace RG {
-
-class FormatError : public std::runtime_error {
- public:
-  explicit FormatError(const std::string& msg) : std::runtime_error(msg) {}
-};
 
 template <typename... Args>
 auto Format(const char* formatter, const Args&... args) -> std::string;
