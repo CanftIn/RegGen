@@ -114,8 +114,7 @@ auto ParseCharClass(const char*& str) -> RegexExprPtr {
       auto new_min = last_rg.Min();
       auto new_max = std::max(rg.Max(), last_rg.Max());
 
-      CharRange new_range{new_min, new_max};
-      merged_ranges.push_back(new_range);
+      merged_ranges.back() = CharRange{new_min, new_max};
     }
   }
 
