@@ -1,5 +1,5 @@
-#ifndef REGGEX_AST_AST_TYPE_TRAITS_H
-#define REGGEX_AST_AST_TYPE_TRAITS_H
+#ifndef REGGEX_AST_AST_TYPE_TRAIT_H
+#define REGGEX_AST_AST_TYPE_TRAIT_H
 
 #include <type_traits>
 
@@ -7,6 +7,47 @@
 #include "RegGen/Common/Type.h"
 
 namespace RG::AST {
+
+namespace Internal {
+
+template <typename T>
+struct IsBasicASTEnum : std::false_type {};
+
+template <typename T>
+struct IsBasicASTEnum<BasicASTEnum<T>> : std::true_type {};
+
+static constexpr auto is_ast_token = same_to<BasicASTToken>;
+static constexpr auto is_ast_enum = generic_type_checker<IsBasicASTEnum>;
+static constexpr auto is_ast_object = derive_from<BasicASTObject>;
+
+template <typename T>
+struct IsASTVectorPtr : std::false_type {};
+
+template <typename T>
+struct IsASTVectorPtr<ASTVector<T>*> : std::true_type {};
+
+template <typename T>
+struct IsASTOptional : std::false_type {};
+
+template <typename T>
+struct IsASTOptional<ASTOptional<T>> : std::true_type {};
+
+static constexpr auto is_astitem_token = is_ast_token;
+static constexpr auto is_astitem_enum = is_ast_enum;
+static constexpr auto is_astitem_object =
+    convertible_to<BasicASTObject*> && !same_to<std::nullptr_t>;
+static constexpr auto is_astitem_vector = generic_type_checker<IsASTVectorPtr>;
+static constexpr auto is_astitem_optional = generic_type_checker<IsASTOptional>;
+
+template <typename T>
+inline constexpr auto IsASTItem() -> bool {
+  return Constraint<T>(is_astitem_token || is_astitem_enum ||
+                       is_astitem_object || is_astitem_vector ||
+                       is_astitem_optional) &&
+         std::is_trivially_destructible_v<T>;
+}
+
+}  // namespace Internal
 
 enum class ASTTypeCategory {
   Token,
@@ -58,4 +99,4 @@ struct ASTTypeTrait {
 
 }  // namespace RG::AST
 
-#endif  // REGGEX_AST_AST_TYPE_TRAITS_H
+#endif  // REGGEX_AST_AST_TYPE_TRAIT_H

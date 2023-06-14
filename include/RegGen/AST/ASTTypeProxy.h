@@ -6,7 +6,7 @@
 
 #include "RegGen/AST/ASTBasic.h"
 #include "RegGen/AST/ASTItem.h"
-#include "RegGen/AST/ASTTypeTraits.h"
+#include "RegGen/AST/ASTTypeTrait.h"
 #include "RegGen/Common/Arena.h"
 #include "RegGen/Common/Error.h"
 

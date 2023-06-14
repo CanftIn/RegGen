@@ -5,7 +5,7 @@
 #include <typeindex>
 
 #include "RegGen/AST/ASTBasic.h"
-#include "RegGen/AST/ASTTypeTraits.h"
+#include "RegGen/AST/ASTTypeTrait.h"
 #include "RegGen/Common/Type.h"
 
 namespace RG::AST {
