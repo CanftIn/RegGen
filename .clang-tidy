@@ -20,7 +20,7 @@ CheckOptions:
   - { key: readability-identifier-naming.ClassConstantCase, value: CamelCase }
   - {
       key: readability-identifier-naming.ConstexprVariableCase,
-      value: CamelCase,
+      value: lower_case,
     }
   - { key: readability-identifier-naming.NamespaceCase, value: CamelCase }
   - { key: readability-identifier-naming.StructCase, value: CamelCase }
