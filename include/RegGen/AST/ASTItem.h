@@ -105,7 +105,7 @@ class ASTItem {
   }
 
   [[noreturn]] void ThrowTypeMismatch() {
-    throw ParserInternalError{"AstItem: storage type mismatch"};
+    throw ParserInternalError{"ASTItem: Storage type mismatch."};
   }
 
   struct TypeMetaInfo {

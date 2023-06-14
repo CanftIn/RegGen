@@ -14,11 +14,11 @@ auto RegexParsingAssert(bool condition, const std::string& msg) -> void {
   }
 }
 
-static constexpr auto MsgUnexpectedEof = "Regex: Unexpected eof";
+static constexpr auto MsgUnexpectedEof = "Regex: Unexpected eof.";
 static constexpr auto MsgEmptyExpressionBody =
-    "Regex: Empty expression body is not allowed";
+    "Regex: Empty expression body is not allowed.";
 static constexpr auto MsgInvalidClosure =
-    "Regex: Invalid closure is not allowed";
+    "Regex: Invalid closure is not allowed.";
 
 auto MergeSequence(RegexExprVec& any, RegexExprVec& seq) -> void {
   assert(!seq.empty());
