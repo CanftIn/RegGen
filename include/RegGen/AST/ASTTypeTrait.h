@@ -70,7 +70,7 @@ struct ASTTypeTrait {
         return ASTTypeCategory::Class;
       }
     } else {
-      static_assert(std::false_type::value, "Invalid AST type.");
+      static_assert(AlwaysFalse<T>::value, "Invalid AST type.");
     }
   }
 

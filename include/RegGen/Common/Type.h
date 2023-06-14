@@ -6,6 +6,12 @@
 
 namespace RG {
 
+template <typename T>
+struct AlwaysTrue : std::true_type {};
+
+template <typename T>
+struct AlwaysFalse : std::false_type {};
+
 namespace Internal {
 
 struct TypeChecker {};
@@ -71,7 +77,8 @@ inline constexpr auto operator!(P /*unused*/) {
 }
 
 template <template <typename> typename Pred>
-static constexpr auto generic_type_checker = Internal::GenericTypeChecker<Pred>{};
+static constexpr auto generic_type_checker =
+    Internal::GenericTypeChecker<Pred>{};
 
 template <typename T, typename P, typename = Internal::EnsureTypeChecker<P>>
 static constexpr auto Constraint(P /*unused*/) -> bool {
@@ -99,7 +106,8 @@ static constexpr auto is_member_object_pointer =
 static constexpr auto is_member_function_pointer =
     generic_type_checker<std::is_member_function_pointer>;
 
-static constexpr auto is_fundamental = generic_type_checker<std::is_fundamental>;
+static constexpr auto is_fundamental =
+    generic_type_checker<std::is_fundamental>;
 static constexpr auto is_arithmetic = generic_type_checker<std::is_arithmetic>;
 static constexpr auto is_scalar = generic_type_checker<std::is_scalar>;
 static constexpr auto is_object = generic_type_checker<std::is_object>;
@@ -117,7 +125,8 @@ static constexpr auto is_standard_layout =
     generic_type_checker<std::is_standard_layout>;
 static constexpr auto is_pod = generic_type_checker<std::is_pod>;
 static constexpr auto is_empty = generic_type_checker<std::is_empty>;
-static constexpr auto is_polymorphic = generic_type_checker<std::is_polymorphic>;
+static constexpr auto is_polymorphic =
+    generic_type_checker<std::is_polymorphic>;
 static constexpr auto is_abstract = generic_type_checker<std::is_abstract>;
 static constexpr auto is_final = generic_type_checker<std::is_final>;
 static constexpr auto is_signed = generic_type_checker<std::is_signed>;
