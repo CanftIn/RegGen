@@ -71,57 +71,57 @@ inline constexpr auto operator!(P /*unused*/) {
 }
 
 template <template <typename> typename Pred>
-static constexpr auto GenericTypeChecker = Internal::GenericTypeChecker<Pred>{};
+static constexpr auto generic_type_checker = Internal::GenericTypeChecker<Pred>{};
 
 template <typename T, typename P, typename = Internal::EnsureTypeChecker<P>>
 static constexpr auto Constraint(P /*unused*/) -> bool {
   return P::template Evaluate<T>();
 }
 
-static constexpr auto is_void = GenericTypeChecker<std::is_void>;
+static constexpr auto is_void = generic_type_checker<std::is_void>;
 static constexpr auto is_null_pointer =
-    GenericTypeChecker<std::is_null_pointer>;
-static constexpr auto is_integral = GenericTypeChecker<std::is_integral>;
+    generic_type_checker<std::is_null_pointer>;
+static constexpr auto is_integral = generic_type_checker<std::is_integral>;
 static constexpr auto is_floating_point =
-    GenericTypeChecker<std::is_floating_point>;
-static constexpr auto is_array = GenericTypeChecker<std::is_array>;
-static constexpr auto is_enum = GenericTypeChecker<std::is_enum>;
-static constexpr auto is_union = GenericTypeChecker<std::is_union>;
-static constexpr auto is_class = GenericTypeChecker<std::is_class>;
-static constexpr auto is_function = GenericTypeChecker<std::is_function>;
-static constexpr auto is_pointer = GenericTypeChecker<std::is_pointer>;
+    generic_type_checker<std::is_floating_point>;
+static constexpr auto is_array = generic_type_checker<std::is_array>;
+static constexpr auto is_enum = generic_type_checker<std::is_enum>;
+static constexpr auto is_union = generic_type_checker<std::is_union>;
+static constexpr auto is_class = generic_type_checker<std::is_class>;
+static constexpr auto is_function = generic_type_checker<std::is_function>;
+static constexpr auto is_pointer = generic_type_checker<std::is_pointer>;
 static constexpr auto is_lvalue_reference =
-    GenericTypeChecker<std::is_lvalue_reference>;
+    generic_type_checker<std::is_lvalue_reference>;
 static constexpr auto is_rvalue_reference =
-    GenericTypeChecker<std::is_rvalue_reference>;
+    generic_type_checker<std::is_rvalue_reference>;
 static constexpr auto is_member_object_pointer =
-    GenericTypeChecker<std::is_member_object_pointer>;
+    generic_type_checker<std::is_member_object_pointer>;
 static constexpr auto is_member_function_pointer =
-    GenericTypeChecker<std::is_member_function_pointer>;
+    generic_type_checker<std::is_member_function_pointer>;
 
-static constexpr auto is_fundamental = GenericTypeChecker<std::is_fundamental>;
-static constexpr auto is_arithmetic = GenericTypeChecker<std::is_arithmetic>;
-static constexpr auto is_scalar = GenericTypeChecker<std::is_scalar>;
-static constexpr auto is_object = GenericTypeChecker<std::is_object>;
-static constexpr auto is_compound = GenericTypeChecker<std::is_compound>;
-static constexpr auto is_reference = GenericTypeChecker<std::is_reference>;
+static constexpr auto is_fundamental = generic_type_checker<std::is_fundamental>;
+static constexpr auto is_arithmetic = generic_type_checker<std::is_arithmetic>;
+static constexpr auto is_scalar = generic_type_checker<std::is_scalar>;
+static constexpr auto is_object = generic_type_checker<std::is_object>;
+static constexpr auto is_compound = generic_type_checker<std::is_compound>;
+static constexpr auto is_reference = generic_type_checker<std::is_reference>;
 static constexpr auto is_member_pointer =
-    GenericTypeChecker<std::is_member_pointer>;
+    generic_type_checker<std::is_member_pointer>;
 
-static constexpr auto is_const = GenericTypeChecker<std::is_const>;
-static constexpr auto is_volatile = GenericTypeChecker<std::is_volatile>;
-static constexpr auto is_trivial = GenericTypeChecker<std::is_trivial>;
+static constexpr auto is_const = generic_type_checker<std::is_const>;
+static constexpr auto is_volatile = generic_type_checker<std::is_volatile>;
+static constexpr auto is_trivial = generic_type_checker<std::is_trivial>;
 static constexpr auto is_trivially_copyable =
-    GenericTypeChecker<std::is_trivially_copyable>;
+    generic_type_checker<std::is_trivially_copyable>;
 static constexpr auto is_standard_layout =
-    GenericTypeChecker<std::is_standard_layout>;
-static constexpr auto is_pod = GenericTypeChecker<std::is_pod>;
-static constexpr auto is_empty = GenericTypeChecker<std::is_empty>;
-static constexpr auto is_polymorphic = GenericTypeChecker<std::is_polymorphic>;
-static constexpr auto is_abstract = GenericTypeChecker<std::is_abstract>;
-static constexpr auto is_final = GenericTypeChecker<std::is_final>;
-static constexpr auto is_signed = GenericTypeChecker<std::is_signed>;
-static constexpr auto is_unsigned = GenericTypeChecker<std::is_unsigned>;
+    generic_type_checker<std::is_standard_layout>;
+static constexpr auto is_pod = generic_type_checker<std::is_pod>;
+static constexpr auto is_empty = generic_type_checker<std::is_empty>;
+static constexpr auto is_polymorphic = generic_type_checker<std::is_polymorphic>;
+static constexpr auto is_abstract = generic_type_checker<std::is_abstract>;
+static constexpr auto is_final = generic_type_checker<std::is_final>;
+static constexpr auto is_signed = generic_type_checker<std::is_signed>;
+static constexpr auto is_unsigned = generic_type_checker<std::is_unsigned>;
 
 namespace Internal {
 
