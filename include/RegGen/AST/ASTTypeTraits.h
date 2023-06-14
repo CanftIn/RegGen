@@ -50,10 +50,10 @@ struct ASTTypeTrait {
 
   static constexpr bool store_in_heap_value = StoreInHeap();
   using SelfType = T;
-  using StoreType = std::conditional_t<store_in_heap_value, T*, T>;
+  using StorageType = std::conditional_t<store_in_heap_value, T*, T>;
 
-  using VectorType = ASTVector<StoreType>;
-  using OptionalType = ASTOptional<StoreType>;
+  using VectorType = ASTVector<StorageType>;
+  using OptionalType = ASTOptional<StorageType>;
 };
 
 }  // namespace RG::AST
