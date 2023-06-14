@@ -22,9 +22,8 @@ auto MergeSequence(RegexExprVec& any, RegexExprVec& seq) -> void {
   assert(!seq.empty());
 
   RegexExprVec reg_vec;
-  reg_vec.reserve(seq.size());
-  std::move(std::make_move_iterator(seq.begin()),
-            std::make_move_iterator(seq.end()), std::back_inserter(reg_vec));
+  reg_vec.insert(reg_vec.end(), std::make_move_iterator(seq.begin()),
+                 std::make_move_iterator(seq.end()));
   seq.clear();
 
   if (reg_vec.size() == 1) {
