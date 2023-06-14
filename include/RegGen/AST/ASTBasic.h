@@ -6,6 +6,7 @@
 
 #include "RegGen/Common/Error.h"
 #include "RegGen/Common/Type.h"
+#include "RegGen/Common/SmallVector.h"
 
 namespace RG::AST {
 
@@ -102,7 +103,7 @@ class ASTVector : public ASTNodeBase {
   void PushBack(const T& value) { container_.push_back(value); }
 
  private:
-  std::vector<T> container_;
+  SmallVector<T> container_;
 };
 
 template <typename T>

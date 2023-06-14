@@ -71,7 +71,7 @@ class BasicASTTypeProxy final : public ASTTypeProxy {
   }
 
   auto ConstructObject(Arena& arena) const -> ASTItem override {
-    if constexpr (TraitType::IsKlass()) {
+    if constexpr (TraitType::IsClass()) {
       return arena.Construct<SelfType>();
     } else {
       throw ParserInternalError{"BasicASTTypeProxy: T is not a Class type."};
@@ -86,7 +86,7 @@ class BasicASTTypeProxy final : public ASTTypeProxy {
 
   auto AssignField(ASTItem obj, int ordinal, ASTItem value) const
       -> void override {
-    if constexpr (TraitType::IsKlass()) {
+    if constexpr (TraitType::IsClass()) {
       obj.Extract<SelfType*>()->SetItem(ordinal, value);
     } else {
       throw ParserInternalError{"BasicASTTypeProxy: T is not a Class type."};

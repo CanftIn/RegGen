@@ -1032,7 +1032,7 @@ class SmallVectorReferenceInvalidationTest : public SmallVectorTestBase {
 
   template <class T>
   static bool isValueType() {
-    return std::is_same<T, typename VectorT::ValueType>::value;
+    return std::is_same<T, typename VectorT::value_type>::value;
   }
 
   void SetUp() override {

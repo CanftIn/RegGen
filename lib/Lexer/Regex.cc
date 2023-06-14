@@ -1,10 +1,8 @@
 #include "RegGen/Lexer/Regex.h"
 
 #include <optional>
-#include <vector>
 
 #include "RegGen/Common/Error.h"
-#include "RegGen/Common/Text.h"
 
 namespace RG {
 
@@ -14,17 +12,19 @@ auto RegexParsingAssert(bool condition, const std::string& msg) -> void {
   }
 }
 
-static constexpr auto MsgUnexpectedEof = "Regex: Unexpected eof.";
-static constexpr auto MsgEmptyExpressionBody =
+static constexpr auto msg_unexpected_eof = "Regex: Unexpected eof.";
+static constexpr auto msg_empty_expression_body =
     "Regex: Empty expression body is not allowed.";
-static constexpr auto MsgInvalidClosure =
+static constexpr auto msg_invalid_closure =
     "Regex: Invalid closure is not allowed.";
 
 auto MergeSequence(RegexExprVec& any, RegexExprVec& seq) -> void {
   assert(!seq.empty());
 
-  auto reg_vec = RegexExprVec(seq.size());
-  std::move(seq.begin(), seq.end(), reg_vec.begin());
+  RegexExprVec reg_vec;
+  reg_vec.reserve(seq.size());
+  std::move(std::make_move_iterator(seq.begin()),
+            std::make_move_iterator(seq.end()), std::back_inserter(reg_vec));
   seq.clear();
 
   if (reg_vec.size() == 1) {
@@ -38,7 +38,7 @@ auto ParseCharacter(const char*& str) -> int {
   int result;
   const auto* p = str;
   if (ConsumeIf(p, '\\')) {
-    RegexParsingAssert(!IsEof(p), MsgUnexpectedEof);
+    RegexParsingAssert(!IsEof(p), msg_unexpected_eof);
 
     result = EscapeRawCharacter(Consume(p));
   } else {
@@ -58,14 +58,14 @@ auto ParseCharClass(const char*& str) -> RegexExprPtr {
   bool reverse = ConsumeIf(p, '^');
 
   std::optional<int> last_ch;
-  std::vector<CharRange> ranges{};
+  SmallVector<CharRange> ranges{};
 
   // 0. parse character ranges
   while (*p && *p != ']') {
     if (last_ch) {
       // if a mark for range
       if (ConsumeIf(p, '-')) {
-        RegexParsingAssert(!IsEof(p), MsgUnexpectedEof);
+        RegexParsingAssert(!IsEof(p), msg_unexpected_eof);
 
         auto ch = *last_ch;
         last_ch = std::nullopt;
@@ -97,15 +97,15 @@ auto ParseCharClass(const char*& str) -> RegexExprPtr {
     ranges.push_back(CharRange{*last_ch});
   }
 
-  RegexParsingAssert(ConsumeIf(p, ']'), MsgUnexpectedEof);
-  RegexParsingAssert(!ranges.empty(), MsgEmptyExpressionBody);
+  RegexParsingAssert(ConsumeIf(p, ']'), msg_unexpected_eof);
+  RegexParsingAssert(!ranges.empty(), msg_empty_expression_body);
 
   str = p;
   std::sort(ranges.begin(), ranges.end(),
             [](auto lhs, auto rhs) { return lhs.Min() < rhs.Min(); });
 
   // 1. merge ranges
-  std::vector<CharRange> merged_ranges{ranges[0]};
+  SmallVector<CharRange> merged_ranges{ranges[0]};
   for (auto rg : ranges) {
     auto last_rg = merged_ranges.back();
     if (rg.Min() > last_rg.Min()) {
@@ -120,13 +120,13 @@ auto ParseCharClass(const char*& str) -> RegexExprPtr {
 
   // 2. reverse ranges
   if (reverse) {
-    std::vector<CharRange> reversed_ranges{};
+    SmallVector<CharRange> reversed_ranges{};
     if (merged_ranges.front().Min() > 0) {
       reversed_ranges.push_back(CharRange{0, merged_ranges.front().Min() - 1});
     }
 
-    for (auto it = merged_ranges.begin(); it != merged_ranges.end(); ++it) {
-      auto next_it = std::next(it);
+    for (auto* it = merged_ranges.begin(); it != merged_ranges.end(); ++it) {
+      auto* next_it = std::next(it);
       if (next_it != merged_ranges.end()) {
         auto new_min = it->Max() + 1;
         auto new_max = next_it->Min() - 1;
@@ -160,7 +160,7 @@ auto ParseRegexInternal(const char*& str, char term) -> RegexExprPtr {
   const auto* p = str;
   for (; *p && *p != term;) {
     if (ConsumeIf(p, '|')) {
-      RegexParsingAssert(!seq.empty(), MsgEmptyExpressionBody);
+      RegexParsingAssert(!seq.empty(), msg_empty_expression_body);
 
       allow_closure = false;
       MergeSequence(any, seq);
@@ -169,8 +169,8 @@ auto ParseRegexInternal(const char*& str, char term) -> RegexExprPtr {
 
       seq.push_back(ParseRegexInternal(p, ')'));
     } else if (*p == '*' || *p == '+' || *p == '?') {
-      RegexParsingAssert(!seq.empty(), MsgEmptyExpressionBody);
-      RegexParsingAssert(allow_closure, MsgInvalidClosure);
+      RegexParsingAssert(!seq.empty(), msg_empty_expression_body);
+      RegexParsingAssert(allow_closure, msg_invalid_closure);
 
       allow_closure = false;
 
@@ -206,8 +206,8 @@ auto ParseRegexInternal(const char*& str, char term) -> RegexExprPtr {
     }
   }
 
-  RegexParsingAssert(!seq.empty(), MsgEmptyExpressionBody);
-  RegexParsingAssert(!term || ConsumeIf(p, term), MsgUnexpectedEof);
+  RegexParsingAssert(!seq.empty(), msg_empty_expression_body);
+  RegexParsingAssert(!term || ConsumeIf(p, term), msg_unexpected_eof);
 
   str = p;
   MergeSequence(any, seq);

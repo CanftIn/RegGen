@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "RegGen/Common/Text.h"
+#include "RegGen/Common/SmallVector.h"
 
 namespace RG {
 
@@ -20,7 +21,7 @@ class ChoiceExpr;
 class ClosureExpr;
 
 using RegexExprPtr = std::unique_ptr<RegexExpr>;
-using RegexExprVec = std::vector<RegexExprPtr>;
+using RegexExprVec = SmallVector<RegexExprPtr, 0>;
 
 auto ParseRegex(const std::string& regex) -> std::unique_ptr<RootExpr>;
 

@@ -4,6 +4,7 @@
 #include "RegGen/AST/ASTBasic.h"
 #include "RegGen/AST/ASTTypeTrait.h"
 #include "RegGen/AST/ASTItem.h"
+#include "RegGen/AST/ASTTypeProxy.h"
 
 
 #endif  // REGGEN_AST_AST_HANDLE_H

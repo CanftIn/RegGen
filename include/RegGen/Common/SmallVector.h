@@ -246,7 +246,7 @@ class SmallVectorTemplateCommon
  public:
   using SizeType = size_t;
   using DifferenceType = ptrdiff_t;
-  using ValueType = T;
+  using value_type = T;
   using Iterator = T*;
   using ConstIterator = const T*;
 

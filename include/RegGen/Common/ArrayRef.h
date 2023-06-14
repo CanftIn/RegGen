@@ -78,11 +78,11 @@ auto find_if_not(R&& range, UnaryPredicate p) {
 template <typename T>
 class ArrayRef {
  public:
-  using ValueType = T;
-  using Pointer = ValueType*;
-  using ConstPointer = const ValueType*;
-  using Reference = ValueType&;
-  using ConstReference = const ValueType&;
+  using value_type = T;
+  using Pointer = value_type*;
+  using ConstPointer = const value_type*;
+  using Reference = value_type&;
+  using ConstReference = const value_type&;
   using Iterator = ConstPointer;
   using ConstIterator = ConstPointer;
   using ReverseIterator = std::reverse_iterator<Iterator>;
