@@ -50,10 +50,12 @@ class MetaInfo {
   auto RootSymbol() const -> const auto& { return variables_.back(); }
 
  private:
-  using TypeInfoMap = std::unordered_map<std::string, TypeInfo*>;
-  using SymbolInfoMap = std::unordered_map<std::string, SymbolInfo*>;
+  using TypeInfoMap =
+      std::unordered_map<std::string, std::unique_ptr<TypeInfo>>;
+  using SymbolInfoMap =
+      std::unordered_map<std::string, std::unique_ptr<SymbolInfo>>;
 
-  const AST::ASTTypeProxyManager* env_;
+  const std::unique_ptr<AST::ASTTypeProxyManager> env_;
 
   TypeInfoMap type_lookup_;
   Array<EnumTypeInfo, 0> enums_;
@@ -68,7 +70,7 @@ class MetaInfo {
 };
 
 auto ResolveParserInfo(const std::string& config,
-                       const AST::ASTTypeProxyManager* env)
+                       std::unique_ptr<AST::ASTTypeProxyManager> env)
     -> std::unique_ptr<MetaInfo>;
 }  // namespace RG
 

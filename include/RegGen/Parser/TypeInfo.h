@@ -42,7 +42,7 @@ struct TypeSpec {
   enum class Qualifier { None, Vector, Optional };
 
   Qualifier qual;
-  TypeInfo* type;
+  std::unique_ptr<TypeInfo> type;
 
  public:
   auto IsNoneQualified() const -> bool { return qual == Qualifier::None; }
@@ -102,7 +102,7 @@ class ClassTypeInfo : public TypeInfo {
  private:
   friend class MetaInfo::Builder;
 
-  BaseTypeInfo* base_ = nullptr;
+  std::unique_ptr<BaseTypeInfo> base_ = nullptr;
   SmallVector<MemberInfo> members_;
 };
 
@@ -148,7 +148,7 @@ class VariableInfo : public SymbolInfo {
   friend class MetaInfo::Builder;
 
   TypeSpec type_;
-  SmallVector<ProductionInfo*> productions_;
+  SmallVector<std::unique_ptr<ProductionInfo>> productions_;
 };
 
 class ProductionInfo {
@@ -161,8 +161,8 @@ class ProductionInfo {
  private:
   friend class MetaInfo::Builder;
 
-  VariableInfo* lhs_;
-  SmallVector<SymbolInfo*> rhs_;
+  std::unique_ptr<VariableInfo> lhs_;
+  SmallVector<std::unique_ptr<SymbolInfo>> rhs_;
 
   SmallVector<AST::ASTHandle> handle_;
 };
