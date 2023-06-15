@@ -296,12 +296,12 @@ class SmallVectorTemplateCommon
 
   auto data() const -> const_pointer { return const_pointer(begin()); }
 
-  auto at(size_type idx) -> size_type {
+  auto at(size_type idx) -> reference {
     assert(idx < size());
     return begin()[idx];
   }
 
-  auto at(size_type idx) const -> size_type {
+  auto at(size_type idx) const -> const_reference {
     assert(idx < size());
     return begin()[idx];
   }
