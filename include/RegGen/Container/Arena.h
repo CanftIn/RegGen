@@ -1,5 +1,5 @@
-#ifndef REGGEX_COMMON_ARENA_H
-#define REGGEX_COMMON_ARENA_H
+#ifndef REGGEX_CONTAINER_ARENA_H
+#define REGGEX_CONTAINER_ARENA_H
 
 #include <cassert>
 #include <cstddef>
@@ -101,4 +101,4 @@ class Arena final : NonCopyable, NonMovable {
 
 }  // namespace RG
 
-#endif  // REGGEX_COMMON_ARENA_H
+#endif  // REGGEX_CONTAINER_ARENA_H

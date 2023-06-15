@@ -1,4 +1,4 @@
-#include "RegGen/Common/Array.h"
+#include "RegGen/Container/Array.h"
 
 #include <gtest/gtest.h>
 

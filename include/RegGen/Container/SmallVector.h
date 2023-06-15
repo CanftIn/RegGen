@@ -1,5 +1,5 @@
-#ifndef REGGEN_COMMON_SMALL_VECTOR_H
-#define REGGEN_COMMON_SMALL_VECTOR_H
+#ifndef REGGEN_CONTAINER_SMALL_VECTOR_H
+#define REGGEN_CONTAINER_SMALL_VECTOR_H
 
 #include <algorithm>
 #include <cassert>
@@ -99,8 +99,7 @@ auto SmallVectorBase<SizeT>::mallocForGrow(size_t min_size, size_t t_size,
 template <class SizeT>
 auto SmallVectorBase<SizeT>::growPod(void* first_el, size_t min_size,
                                      size_t t_size) -> void {
-  size_t new_capacity =
-      getNewCapacity<SizeT>(min_size, this->capacity());
+  size_t new_capacity = getNewCapacity<SizeT>(min_size, this->capacity());
   void* new_elts = nullptr;
   if (BeginX == first_el) {
     new_elts = std::malloc(new_capacity * t_size);
@@ -287,7 +286,8 @@ class SmallVectorTemplateCommon
   auto size_in_bytes() const -> size_type { return size() * sizeof(T); }
 
   auto max_size() const -> size_type {
-    return std::min(this->SizeTypeMax(), static_cast<size_type>(-1) / sizeof(T));
+    return std::min(this->SizeTypeMax(),
+                    static_cast<size_type>(-1) / sizeof(T));
   }
 
   auto capacity_in_bytes() const -> size_t { return capacity() * sizeof(T); }
@@ -475,8 +475,7 @@ class SmallVectorTemplateBase<T, true> : public SmallVectorTemplateCommon<T> {
 
   using ValueParamT = std::conditional_t<takes_param_by_value, T, const T&>;
 
-  SmallVectorTemplateBase(size_t size)
-      : SmallVectorTemplateCommon<T>(size) {}
+  SmallVectorTemplateBase(size_t size) : SmallVectorTemplateCommon<T>(size) {}
 
   // No need to do a destroy loop for POD's.
   static auto destroy_range(T* /*unused*/, T* /*unused*/) -> void {}
@@ -758,7 +757,8 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
     return insert_one_impl(i, this->forward_value_param(elt));
   }
 
-  auto insert(iterator i, size_type num_to_insert, ValueParamT elt) -> iterator {
+  auto insert(iterator i, size_type num_to_insert, ValueParamT elt)
+      -> iterator {
     size_t insert_elt = i - this->begin();
 
     if (i == this->end()) {
@@ -1206,4 +1206,4 @@ inline void swap(RG::SmallVector<T, N>& lhs, RG::SmallVector<T, N>& rhs) {
 
 }  // namespace std
 
-#endif  // REGGEN_COMMON_SMALL_VECTOR_H
+#endif  // REGGEN_CONTAINER_SMALL_VECTOR_H

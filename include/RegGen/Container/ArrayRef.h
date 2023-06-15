@@ -1,5 +1,5 @@
-#ifndef REGGEN_COMMON_ARRAY_REF_H
-#define REGGEN_COMMON_ARRAY_REF_H
+#ifndef REGGEN_CONTAINER_ARRAY_REF_H
+#define REGGEN_CONTAINER_ARRAY_REF_H
 
 #include <array>
 #include <initializer_list>
@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "RegGen/Common/SmallVector.h"
+#include "RegGen/Container/SmallVector.h"
 
 namespace RG {
 
@@ -387,4 +387,4 @@ auto operator!=(ArrayRef<T> a1, const std::vector<T>& a2) -> bool {
 
 }  // namespace RG
 
-#endif  // REGGEN_COMMON_ARRAY_REF_H
+#endif  // REGGEN_CONTAINER_ARRAY_REF_H

@@ -1,4 +1,4 @@
-#include "RegGen/Common/SmallVector.h"
+#include "RegGen/Container/SmallVector.h"
 
 #include <gtest/gtest.h>
 

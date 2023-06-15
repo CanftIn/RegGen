@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "RegGen/Common/Text.h"
-#include "RegGen/Common/SmallVector.h"
+#include "RegGen/Container/SmallVector.h"
 
 namespace RG {
 

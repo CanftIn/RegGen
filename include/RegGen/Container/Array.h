@@ -1,5 +1,5 @@
-#ifndef RG_COMMON_ARRAY_H_
-#define RG_COMMON_ARRAY_H_
+#ifndef REGGEN_CONTAINER_ARRAY_H_
+#define REGGEN_CONTAINER_ARRAY_H_
 
 #include <algorithm>
 #include <iterator>
@@ -286,4 +286,4 @@ constexpr auto to_array(const T (&arr)[N]) -> Array<T, N> {
 
 }  // namespace RG
 
-#endif  // RG_COMMON_ARRAY_H_
+#endif  // REGGEN_CONTAINER_ARRAY_H_

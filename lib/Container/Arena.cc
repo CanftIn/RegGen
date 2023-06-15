@@ -1,4 +1,4 @@
-#include "RegGen/Common/Arena.h"
+#include "RegGen/Container/Arena.h"
 
 #include <cstdlib>
 
