@@ -10,5 +10,6 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 enable_testing()
 find_package(GTest REQUIRED CONFIG)
 
+add_subdirectory(Container)
 add_subdirectory(Common)
 add_subdirectory(Lexer)
