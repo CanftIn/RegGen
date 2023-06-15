@@ -8,8 +8,8 @@
 #include "RegGen/AST/ASTItem.h"
 #include "RegGen/AST/ASTTypeProxy.h"
 #include "RegGen/AST/ASTTypeTrait.h"
-#include "RegGen/Common/ArrayRef.h"
-#include "RegGen/Common/SmallVector.h"
+#include "RegGen/Container/ArrayRef.h"
+#include "RegGen/Container/SmallVector.h"
 
 namespace RG::AST {
 

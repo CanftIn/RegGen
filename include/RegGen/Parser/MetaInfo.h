@@ -5,8 +5,8 @@
 
 #include "RegGen/AST/ASTHandle.h"
 #include "RegGen/AST/ASTTypeProxy.h"
-#include "RegGen/Common/Array.h"
-#include "RegGen/Common/SmallVector.h"
+#include "RegGen/Container/Array.h"
+#include "RegGen/Container/SmallVector.h"
 #include "RegGen/Lexer/Regex.h"
 
 namespace RG {

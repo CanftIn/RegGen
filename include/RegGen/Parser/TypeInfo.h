@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 
-#include "RegGen/Common/SmallVector.h"
+#include "RegGen/Container/SmallVector.h"
 #include "RegGen/Parser/MetaInfo.h"
 
 namespace RG {

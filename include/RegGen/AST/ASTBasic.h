@@ -6,7 +6,7 @@
 
 #include "RegGen/Common/Error.h"
 #include "RegGen/Common/Type.h"
-#include "RegGen/Common/SmallVector.h"
+#include "RegGen/Container/SmallVector.h"
 
 namespace RG::AST {
 
