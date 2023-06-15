@@ -367,7 +367,7 @@ TYPED_TEST(SmallVectorTest, IterationTest) {
   this->makeSequence(this->theVector, 1, 2);
 
   // Forward Iteration
-  typename TypeParam::Iterator it = this->theVector.begin();
+  typename TypeParam::iterator it = this->theVector.begin();
   EXPECT_TRUE(*it == this->theVector.front());
   EXPECT_TRUE(*it == this->theVector[0]);
   EXPECT_EQ(1, it->getValue());
@@ -385,7 +385,7 @@ TYPED_TEST(SmallVectorTest, IterationTest) {
   EXPECT_EQ(1, it->getValue());
 
   // Reverse Iteration
-  typename TypeParam::ReverseIterator rit = this->theVector.rbegin();
+  typename TypeParam::reverse_iterator rit = this->theVector.rbegin();
   EXPECT_TRUE(*rit == this->theVector[1]);
   EXPECT_EQ(2, rit->getValue());
   ++rit;
@@ -561,7 +561,7 @@ TYPED_TEST(SmallVectorTest, InsertTest) {
   SCOPED_TRACE("InsertTest");
 
   this->makeSequence(this->theVector, 1, 3);
-  typename TypeParam::Iterator i =
+  typename TypeParam::iterator i =
       this->theVector.insert(this->theVector.begin() + 1, Constructable(77));
   EXPECT_EQ(this->theVector.begin() + 1, i);
   this->assertValuesInOrder(this->theVector, 4U, 1, 77, 2, 3);
@@ -573,7 +573,7 @@ TYPED_TEST(SmallVectorTest, InsertCopy) {
 
   this->makeSequence(this->theVector, 1, 3);
   Constructable c(77);
-  typename TypeParam::Iterator i =
+  typename TypeParam::iterator i =
       this->theVector.insert(this->theVector.begin() + 1, c);
   EXPECT_EQ(this->theVector.begin() + 1, i);
   this->assertValuesInOrder(this->theVector, 4U, 1, 77, 2, 3);

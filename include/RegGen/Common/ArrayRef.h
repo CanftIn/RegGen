@@ -79,21 +79,21 @@ template <typename T>
 class ArrayRef {
  public:
   using value_type = T;
-  using Pointer = value_type*;
-  using ConstPointer = const value_type*;
-  using Reference = value_type&;
-  using ConstReference = const value_type&;
-  using Iterator = ConstPointer;
-  using ConstIterator = ConstPointer;
-  using ReverseIterator = std::reverse_iterator<Iterator>;
-  using ConstReverseIteartor = std::reverse_iterator<ConstIterator>;
-  using SizeType = size_t;
-  using DifferenceType = ptrdiff_t;
+  using pointer = value_type*;
+  using const_pointer = const value_type*;
+  using reference = value_type&;
+  using const_reference = const value_type&;
+  using iterator = const_pointer;
+  using const_iterator = const_pointer;
+  using reverse_iterator = std::reverse_iterator<iterator>;
+  using const_reverse_iteartor = std::reverse_iterator<const_iterator>;
+  using size_type = size_t;
+  using difference_type = ptrdiff_t;
 
  private:
   const T* Data = nullptr;
 
-  SizeType Length = 0;
+  size_type Length = 0;
 
   void debugCheckNullptrInvariant() const {
     assert((Data != nullptr) ||
@@ -168,20 +168,20 @@ class ArrayRef {
           nullptr)
       : Data(vec.data()), Length(vec.size()) {}
 
-  auto begin() const -> Iterator { return Data; }
-  auto end() const -> Iterator { return Data + Length; }
+  auto begin() const -> iterator { return Data; }
+  auto end() const -> iterator { return Data + Length; }
 
-  constexpr auto cbegin() const -> ConstIterator { return Data; }
-  constexpr auto cend() const -> ConstIterator { return Data + Length; }
+  constexpr auto cbegin() const -> const_iterator { return Data; }
+  constexpr auto cend() const -> const_iterator { return Data + Length; }
 
-  auto rbegin() const -> ReverseIterator { return ReverseIterator(end()); }
-  auto rend() const -> ReverseIterator { return ReverseIterator(begin()); }
+  auto rbegin() const -> reverse_iterator { return reverse_iterator(end()); }
+  auto rend() const -> reverse_iterator { return reverse_iterator(begin()); }
 
-  auto crbegin() const -> ConstReverseIteartor {
-    return ConstReverseIteartor(cend());
+  auto crbegin() const -> const_reverse_iteartor {
+    return const_reverse_iteartor(cend());
   }
-  auto crend() const -> ConstReverseIteartor {
-    return ConstReverseIteartor(cbegin());
+  auto crend() const -> const_reverse_iteartor {
+    return const_reverse_iteartor(cbegin());
   }
 
   constexpr auto empty() const -> bool { return Length == 0; }

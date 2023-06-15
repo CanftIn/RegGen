@@ -43,16 +43,16 @@ template <typename Tp, size_t N>
 class Array final {
  public:
   using value_type = Tp;
-  using Pointer = value_type*;
-  using ConstPointer = const value_type*;
-  using Reference = value_type&;
-  using ConstReference = const value_type&;
-  using Iterator = Pointer;
-  using ConstIterator = ConstPointer;
-  using SizeType = size_t;
-  using DifferenceType = std::ptrdiff_t;
-  using ReverseIterator = std::reverse_iterator<Iterator>;
-  using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
+  using pointer = value_type*;
+  using const_pointer = const value_type*;
+  using reference = value_type&;
+  using const_reference = const value_type&;
+  using iterator = pointer;
+  using const_iterator = const_pointer;
+  using size_type = size_t;
+  using difference_type = std::ptrdiff_t;
+  using reverse_iterator = std::reverse_iterator<iterator>;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
  private:
   using ArrType = Internal::ArrayTraits<Tp, N>;
@@ -67,90 +67,90 @@ class Array final {
     std::swap_ranges(begin(), begin() + M, other.begin());
   }
 
-  auto begin() noexcept -> Iterator { return Iterator(data()); }
+  auto begin() noexcept -> iterator { return iterator(data()); }
 
-  constexpr auto begin() const noexcept -> ConstIterator {
-    return ConstIterator(data());
+  constexpr auto begin() const noexcept -> const_iterator {
+    return const_iterator(data());
   }
 
-  auto end() noexcept -> Iterator { return Iterator(data() + size()); }
+  auto end() noexcept -> iterator { return iterator(data() + size()); }
 
-  constexpr auto end() const noexcept -> ConstIterator {
-    return ConstIterator(data() + size());
+  constexpr auto end() const noexcept -> const_iterator {
+    return const_iterator(data() + size());
   }
 
-  constexpr auto rbegin() noexcept -> ReverseIterator {
-    return ReverseIterator(end());
+  constexpr auto rbegin() noexcept -> reverse_iterator {
+    return reverse_iterator(end());
   }
 
-  constexpr auto rbegin() const noexcept -> ConstReverseIterator {
-    return ConstReverseIterator(end());
+  constexpr auto rbegin() const noexcept -> const_reverse_iterator {
+    return const_reverse_iterator(end());
   }
 
-  constexpr auto rend() noexcept -> ReverseIterator {
-    return ReverseIterator(begin());
+  constexpr auto rend() noexcept -> reverse_iterator {
+    return reverse_iterator(begin());
   }
 
-  constexpr auto rend() const noexcept -> ConstReverseIterator {
-    return ConstReverseIterator(begin());
+  constexpr auto rend() const noexcept -> const_reverse_iterator {
+    return const_reverse_iterator(begin());
   }
 
-  constexpr auto cbegin() const noexcept -> ConstIterator {
-    return ConstIterator(data());
+  constexpr auto cbegin() const noexcept -> const_iterator {
+    return const_iterator(data());
   }
 
-  constexpr auto cend() const noexcept -> ConstIterator {
-    return ConstIterator(data() + size());
+  constexpr auto cend() const noexcept -> const_iterator {
+    return const_iterator(data() + size());
   }
 
-  constexpr auto crbegin() const noexcept -> ConstReverseIterator {
-    return ConstReverseIterator(end());
+  constexpr auto crbegin() const noexcept -> const_reverse_iterator {
+    return const_reverse_iterator(end());
   }
 
-  constexpr auto crend() const noexcept -> ConstReverseIterator {
-    return ConstReverseIterator(begin());
+  constexpr auto crend() const noexcept -> const_reverse_iterator {
+    return const_reverse_iterator(begin());
   }
 
-  constexpr auto size() const noexcept -> SizeType { return N; }
+  constexpr auto size() const noexcept -> size_type { return N; }
 
-  constexpr auto max_size() const noexcept -> SizeType { return N; }
+  constexpr auto max_size() const noexcept -> size_type { return N; }
 
   constexpr auto empty() const noexcept -> bool { return N == 0; }
 
-  constexpr auto operator[](SizeType n) noexcept -> Reference {
+  constexpr auto operator[](size_type n) noexcept -> reference {
     return ArrType::ref(Elems, n);
   }
 
-  constexpr auto operator[](SizeType n) const noexcept -> ConstReference {
+  constexpr auto operator[](size_type n) const noexcept -> const_reference {
     return ArrType::ref(Elems, n);
   }
 
-  auto at(SizeType n) -> Reference {
+  auto at(size_type n) -> reference {
     if (n >= size()) {
       throw std::out_of_range("Array::at");
     }
     return ArrType::ref(Elems, n);
   }
 
-  constexpr auto at(SizeType n) const -> ConstReference {
+  constexpr auto at(size_type n) const -> const_reference {
     return n < N ? ArrType::ref(Elems, n)
                  : throw std::out_of_range("Array::at"),
            ArrType::ref(Elems, n);
   }
 
-  auto front() noexcept -> Reference { return *begin(); }
+  auto front() noexcept -> reference { return *begin(); }
 
-  constexpr auto front() const noexcept -> ConstReference { return *begin(); }
+  constexpr auto front() const noexcept -> const_reference { return *begin(); }
 
-  auto back() noexcept -> Reference { return N ? *(end() - 1) : *end(); }
+  auto back() noexcept -> reference { return N ? *(end() - 1) : *end(); }
 
-  constexpr auto back() const noexcept -> ConstReference {
+  constexpr auto back() const noexcept -> const_reference {
     return N ? ArrType::ref(Elems, N - 1) : ArrType::ref(Elems, N);
   }
 
-  auto data() noexcept -> Pointer { return ArrType::ptr(Elems); }
+  auto data() noexcept -> pointer { return ArrType::ptr(Elems); }
 
-  constexpr auto data() const noexcept -> ConstPointer {
+  constexpr auto data() const noexcept -> const_pointer {
     return ArrType::ptr(Elems);
   }
 };

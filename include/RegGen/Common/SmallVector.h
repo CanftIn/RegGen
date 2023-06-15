@@ -244,94 +244,94 @@ class SmallVectorTemplateCommon
   }
 
  public:
-  using SizeType = size_t;
-  using DifferenceType = ptrdiff_t;
+  using size_type = size_t;
+  using difference_type = ptrdiff_t;
   using value_type = T;
-  using Iterator = T*;
-  using ConstIterator = const T*;
+  using iterator = T*;
+  using const_iterator = const T*;
 
-  using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
-  using ReverseIterator = std::reverse_iterator<Iterator>;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+  using reverse_iterator = std::reverse_iterator<iterator>;
 
-  using Reference = T&;
-  using ConstReference = const T&;
-  using Pointer = T*;
-  using ConstPointer = const T*;
+  using reference = T&;
+  using const_reference = const T&;
+  using pointer = T*;
+  using const_pointer = const T*;
 
   using Base::capacity;
   using Base::empty;
   using Base::size;
 
-  auto begin() -> Iterator { return static_cast<Iterator>(this->BeginX); }
+  auto begin() -> iterator { return static_cast<iterator>(this->BeginX); }
 
-  auto begin() const -> ConstIterator {
-    return static_cast<ConstIterator>(this->BeginX);
+  auto begin() const -> const_iterator {
+    return static_cast<const_iterator>(this->BeginX);
   }
 
-  auto end() -> Iterator { return begin() + size(); }
+  auto end() -> iterator { return begin() + size(); }
 
-  auto end() const -> ConstIterator { return begin() + size(); }
+  auto end() const -> const_iterator { return begin() + size(); }
 
-  auto rbegin() -> ReverseIterator { return ReverseIterator(end()); }
+  auto rbegin() -> reverse_iterator { return reverse_iterator(end()); }
 
-  auto rbegin() const -> ConstReverseIterator {
-    return ConstReverseIterator(end());
+  auto rbegin() const -> const_reverse_iterator {
+    return const_reverse_iterator(end());
   }
 
-  auto rend() -> ReverseIterator { return ReverseIterator(begin()); }
+  auto rend() -> reverse_iterator { return reverse_iterator(begin()); }
 
-  auto rend() const -> ConstReverseIterator {
-    return ConstReverseIterator(begin());
+  auto rend() const -> const_reverse_iterator {
+    return const_reverse_iterator(begin());
   }
 
-  auto size_in_bytes() const -> SizeType { return size() * sizeof(T); }
+  auto size_in_bytes() const -> size_type { return size() * sizeof(T); }
 
-  auto max_size() const -> SizeType {
-    return std::min(this->SizeTypeMax(), static_cast<SizeType>(-1) / sizeof(T));
+  auto max_size() const -> size_type {
+    return std::min(this->SizeTypeMax(), static_cast<size_type>(-1) / sizeof(T));
   }
 
   auto capacity_in_bytes() const -> size_t { return capacity() * sizeof(T); }
 
-  auto data() -> Pointer { return Pointer(begin()); }
+  auto data() -> pointer { return pointer(begin()); }
 
-  auto data() const -> ConstPointer { return ConstPointer(begin()); }
+  auto data() const -> const_pointer { return const_pointer(begin()); }
 
-  auto at(SizeType idx) -> SizeType {
+  auto at(size_type idx) -> size_type {
     assert(idx < size());
     return begin()[idx];
   }
 
-  auto at(SizeType idx) const -> SizeType {
+  auto at(size_type idx) const -> size_type {
     assert(idx < size());
     return begin()[idx];
   }
 
-  auto operator[](SizeType idx) -> Reference {
+  auto operator[](size_type idx) -> reference {
     assert(idx < size());
     return begin()[idx];
   }
 
-  auto operator[](SizeType idx) const -> ConstReference {
+  auto operator[](size_type idx) const -> const_reference {
     assert(idx < size());
     return begin()[idx];
   }
 
-  auto front() -> Reference {
+  auto front() -> reference {
     assert(!empty());
     return begin()[0];
   }
 
-  auto front() const -> ConstReference {
+  auto front() const -> const_reference {
     assert(!empty());
     return begin()[0];
   }
 
-  auto back() -> Reference {
+  auto back() -> reference {
     assert(!empty());
     return end()[-1];
   }
 
-  auto back() const -> ConstReference {
+  auto back() const -> const_reference {
     assert(!empty());
     return end()[-1];
   }
@@ -541,10 +541,10 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
   using SuperClass = SmallVectorTemplateBase<T>;
 
  public:
-  using Iterator = typename SuperClass::Iterator;
-  using ConstIterator = typename SuperClass::ConstIterator;
-  using Reference = typename SuperClass::Reference;
-  using SizeType = typename SuperClass::SizeType;
+  using iterator = typename SuperClass::iterator;
+  using const_iterator = typename SuperClass::const_iterator;
+  using reference = typename SuperClass::reference;
+  using size_type = typename SuperClass::size_type;
 
  protected:
   using SmallVectorTemplateBase<T>::takes_param_by_value;
@@ -568,7 +568,7 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
 
  private:
   template <bool ForOverwrite>
-  auto resizeImpl(SizeType n) -> void {
+  auto resizeImpl(size_type n) -> void {
     if (n < this->size()) {
       this->pop_back_n(this->size() - n);
     } else if (n > this->size()) {
@@ -585,17 +585,17 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
   }
 
  public:
-  auto resize(SizeType n) -> void { resizeImpl<false>(n); }
+  auto resize(size_type n) -> void { resizeImpl<false>(n); }
 
-  auto resize_for_overwrite(SizeType n) -> void { resizeImpl<true>(n); }
+  auto resize_for_overwrite(size_type n) -> void { resizeImpl<true>(n); }
 
-  auto truncate(SizeType n) -> void {
+  auto truncate(size_type n) -> void {
     assert(this->size() >= n && "Cannot increase size with truncate");
     this->destroy_range(this->begin() + n, this->end());
     this->set_size(n);
   }
 
-  auto resize(SizeType n, ValueParamT nv) -> void {
+  auto resize(size_type n, ValueParamT nv) -> void {
     if (n == this->size()) {
       return;
     }
@@ -609,13 +609,13 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
     this->append(n - this->size(), nv);
   }
 
-  auto reserve(SizeType n) -> void {
+  auto reserve(size_type n) -> void {
     if (this->capacity() < n) {
       this->grow(n);
     }
   }
 
-  auto pop_back_n(SizeType num_items) -> void {
+  auto pop_back_n(size_type num_items) -> void {
     assert(this->size() >= num_items);
     this->destroy_range(this->end() - num_items, this->end());
     this->set_size(this->size() - num_items);
@@ -635,13 +635,13 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
                 std::input_iterator_tag>>>
   void append(InIter in_start, InIter in_end) {
     this->assertSafeToAddRange(in_start, in_end);
-    SizeType num_inputs = std::distance(in_start, in_end);
+    size_type num_inputs = std::distance(in_start, in_end);
     this->reserve(this->size() + num_inputs);
     this->uninitialized_copy(in_start, in_end, this->end());
     this->set_size(this->size() + num_inputs);
   }
 
-  auto append(SizeType num_inputs, ValueParamT elt) -> void {
+  auto append(size_type num_inputs, ValueParamT elt) -> void {
     const T* elt_ptr = this->reserveForParamAndGetAddress(elt, num_inputs);
     std::uninitialized_fill_n(this->end(), num_inputs, *elt_ptr);
     this->set_size(this->size() + num_inputs);
@@ -655,7 +655,7 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
     append(rhs.begin(), rhs.end());
   }
 
-  auto assign(SizeType num_elts, ValueParamT elt) -> void {
+  auto assign(size_type num_elts, ValueParamT elt) -> void {
     if (num_elts > this->capacity()) {
       this->growAndAssign(num_elts, elt);
       return;
@@ -688,26 +688,26 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
     assign(rhs.begin(), rhs.end());
   }
 
-  auto erase(ConstIterator ci) -> ConstIterator {
-    auto i = const_cast<Iterator>(ci);
+  auto erase(const_iterator ci) -> const_iterator {
+    auto i = const_cast<iterator>(ci);
 
     assert(this->isReferenceToStorage(ci) &&
            "Iterator to erase is out of bounds.");
 
-    Iterator n = i;
+    iterator n = i;
     std::move(i + 1, this->end(), i);
     this->pop_back();
     return (n);
   }
 
-  auto erase(ConstIterator cs, ConstIterator ce) -> ConstIterator {
-    auto s = const_cast<Iterator>(cs);
-    auto e = const_cast<Iterator>(ce);
+  auto erase(const_iterator cs, const_iterator ce) -> const_iterator {
+    auto s = const_cast<iterator>(cs);
+    auto e = const_cast<iterator>(ce);
 
     assert(this->isRangeInStorage(s, e) && "Range to erase is out of bounds.");
 
-    Iterator n = s;
-    Iterator i = std::move(e, this->end(), s);
+    iterator n = s;
+    iterator i = std::move(e, this->end(), s);
     this->destroy_range(i, this->end());
     this->set_size(i - this->begin());
     return (n);
@@ -715,7 +715,7 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
 
  private:
   template <class ArgType>
-  auto insert_one_impl(Iterator i, ArgType&& elt) -> Iterator {
+  auto insert_one_impl(iterator i, ArgType&& elt) -> iterator {
     static_assert(
         std::is_same<std::remove_const_t<std::remove_reference_t<ArgType>>,
                      T>::value,
@@ -750,15 +750,15 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
   }
 
  public:
-  auto insert(Iterator i, T&& elt) -> Iterator {
+  auto insert(iterator i, T&& elt) -> iterator {
     return insert_one_impl(i, this->forward_value_param(std::move(elt)));
   }
 
-  auto insert(Iterator i, const T& elt) -> Iterator {
+  auto insert(iterator i, const T& elt) -> iterator {
     return insert_one_impl(i, this->forward_value_param(elt));
   }
 
-  auto insert(Iterator i, SizeType num_to_insert, ValueParamT elt) -> Iterator {
+  auto insert(iterator i, size_type num_to_insert, ValueParamT elt) -> iterator {
     size_t insert_elt = i - this->begin();
 
     if (i == this->end()) {
@@ -774,8 +774,8 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
 
     if (size_t(this->end() - i) >= num_to_insert) {
       T* old_end = this->end();
-      append(std::move_iterator<Iterator>(this->end() - num_to_insert),
-             std::move_iterator<Iterator>(this->end()));
+      append(std::move_iterator<iterator>(this->end() - num_to_insert),
+             std::move_iterator<iterator>(this->end()));
       std::move_backward(i, old_end - num_to_insert, old_end);
 
       if (!takes_param_by_value && i <= elt_ptr && elt_ptr < this->end()) {
@@ -805,7 +805,7 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
             typename = std::enable_if_t<std::is_convertible_v<
                 typename std::iterator_traits<ItTy>::iterator_category,
                 std::input_iterator_tag>>>
-  auto insert(Iterator i, ItTy from, ItTy to) -> Iterator {
+  auto insert(iterator i, ItTy from, ItTy to) -> iterator {
     size_t insert_elt = i - this->begin();
 
     if (i == this->end()) {
@@ -823,8 +823,8 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
 
     if (size_t(this->end() - i) >= num_to_insert) {
       T* old_end = this->end();
-      append(std::move_iterator<Iterator>(this->end() - num_to_insert),
-             std::move_iterator<Iterator>(this->end()));
+      append(std::move_iterator<iterator>(this->end() - num_to_insert),
+             std::move_iterator<iterator>(this->end()));
       std::move_backward(i, old_end - num_to_insert, old_end);
       std::copy(from, to, i);
       return i;
@@ -845,12 +845,12 @@ class SmallVectorImpl : public SmallVectorTemplateBase<T> {
     return i;
   }
 
-  auto insert(Iterator i, std::initializer_list<T> il) -> Iterator {
+  auto insert(iterator i, std::initializer_list<T> il) -> iterator {
     insert(i, il.begin(), il.end());
   }
 
   template <typename... ArgTypes>
-  auto emplace_back(ArgTypes&&... args) -> Reference {
+  auto emplace_back(ArgTypes&&... args) -> reference {
     if (this->size() >= this->capacity()) {
       return this->growAndEmplaceBack(std::forward<ArgTypes>(args)...);
     }
@@ -901,7 +901,7 @@ auto SmallVectorImpl<T>::swap(SmallVectorImpl<T>& rhs) -> void {
     num_shared = rhs.size();
   }
 
-  for (SizeType i = 0; i != num_shared; ++i) {
+  for (size_type i = 0; i != num_shared; ++i) {
     std::swap((*this)[i], rhs[i]);
   }
 
@@ -931,7 +931,7 @@ auto SmallVectorImpl<T>::operator=(const SmallVectorImpl<T>& rhs)
   size_t rhs_size = rhs.size();
   size_t cur_size = this->size();
   if (rhs_size <= cur_size) {
-    Iterator new_end;
+    iterator new_end;
     if (rhs_size) {
       new_end = std::copy(rhs.begin(), rhs.begin() + rhs_size, this->begin());
     } else {
@@ -980,7 +980,7 @@ auto SmallVectorImpl<T>::operator=(SmallVectorImpl<T>&& rhs) noexcept
   size_t cur_size = this->size();
 
   if (cur_size >= rhs_size) {
-    Iterator new_end = this->begin();
+    iterator new_end = this->begin();
     if (rhs_size) {
       new_end = std::move(rhs.begin(), rhs.end(), new_end);
     }
