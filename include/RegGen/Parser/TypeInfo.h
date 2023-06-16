@@ -134,9 +134,25 @@ class SymbolInfo {
   std::string name_;
 };
 
+class TokenInfo : public SymbolInfo {
+ public:
+  TokenInfo(int id = -1, const std::string& name = "") : SymbolInfo(id, name) {}
+
+  auto GetCategory() const -> Category override { return Category::Token; }
+
+  auto TextDefinition() const -> const auto& { return text_def_; }
+  auto TreeDefinition() const -> const auto& { return ast_def_; }
+
+ private:
+  friend class MetaInfo::Builder;
+
+  std::string text_def_;
+  std::unique_ptr<RootExpr> ast_def_;
+};
+
 class VariableInfo : public SymbolInfo {
  public:
-  explicit VariableInfo(int id = -1, const std::string& name = "")
+  VariableInfo(int id = -1, const std::string& name = "")
       : SymbolInfo(id, name) {}
 
   auto GetCategory() const -> Category override { return Category::Variable; }
@@ -164,7 +180,7 @@ class ProductionInfo {
   std::unique_ptr<VariableInfo> lhs_;
   SmallVector<std::unique_ptr<SymbolInfo>> rhs_;
 
-  SmallVector<AST::ASTHandle> handle_;
+  std::unique_ptr<AST::ASTHandle> handle_;
 };
 
 }  // namespace RG
