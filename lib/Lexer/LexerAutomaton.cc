@@ -153,4 +153,114 @@ struct RegexExprVisitImpl : public RegexExprVisitor {
   }
 };
 
+auto CollectRegexNodeInfo(const RootExprVec& defs) -> RegexEvalResult {
+  RegexExprVisitImpl visitor{};
+
+  for (const auto& root : defs) {
+    root->Accept(visitor);
+  }
+
+  return RegexEvalResult{visitor.info_map, visitor.follow_pos};
+}
+
+auto ComputeInitialPositionSet(const RegexEvalResult& lookup,
+                               const RootExprVec& roots) -> PositionSet {
+  PositionSet result = {};
+  for (const auto& expr : roots) {
+    const auto& first_pos = lookup.info_map.at(expr).first_pos;
+    result.insert(first_pos.begin(), first_pos.end());
+  }
+  return result;
+}
+
+auto ComputeTargetPositionSet(const RegexEvalResult& lookup,
+                              const PositionSet& src, int ch) -> PositionSet {
+  PositionSet target = {};
+  for (const auto* pos : src) {
+    if (pos->TestPassage(ch)) {
+      const auto& t = lookup.follow_pos.at(pos);
+      target.insert(t.begin(), t.end());
+    }
+  }
+  return target;
+}
+
+auto ComputeAcceptCategory(const AcceptCategoryLookup& lookup,
+                           const PositionSet& set) -> const TokenInfo* {
+  const TokenInfo* result = nullptr;
+  for (const auto* pos : set) {
+    auto iter = lookup.find(pos);
+    if (iter != lookup.end()) {
+      if (result == nullptr || result->Id() > iter->second->Id()) {
+        result = iter->second;
+      }
+    }
+  }
+  return result;
+}
+
+auto BuildDfaAutomaton(const JointRegexTree& trees)
+    -> std::unique_ptr<const LexerAutomaton> {
+  auto eval_result = CollectRegexNodeInfo(trees.roots);
+  auto initial_state = ComputeInitialPositionSet(eval_result, trees.roots);
+
+  auto dfa = std::make_unique<LexerAutomaton>();
+  auto dfa_state_lookup =
+      std::map<PositionSet, DfaState*>{{initial_state, dfa->NewState()}};
+
+  for (std::deque<PositionSet> unprocessed{initial_state}; !unprocessed.empty();
+       unprocessed.pop_front()) {
+    const auto& src_set = unprocessed.front();
+    const auto src_state = dfa_state_lookup.at(src_set);
+
+    for (int ch = 0; ch < 128; ++ch) {
+      auto dest_set = ComputeTargetPositionSet(eval_result, src_set, ch);
+
+      if (dest_set.empty()) {
+        continue;
+      }
+
+      auto& dest_state = dfa_state_lookup[dest_set];
+
+      if (dest_state == nullptr) {
+        auto acc_term = ComputeAcceptCategory(trees.acc_lookup, dest_set);
+
+        dest_state = dfa->NewState(acc_term);
+
+        unprocessed.push_back(dest_set);
+      }
+
+      dfa->NewTransition(src_state, dest_state, ch);
+    }
+  }
+
+  return dfa;
+}
+
+auto PrepareRegexBatch(const MetaInfo& info) {
+  JointRegexTree result;
+
+  auto process_token = [&](const TokenInfo& token) {
+    result.roots.push_back(token.TreeDefinition().get());
+
+    result.acc_lookup[result.roots.back()] = &token;
+  };
+
+  for (const auto& token : info.Tokens()) {
+    process_token(token);
+  }
+
+  for (const auto& token : info.IgnoredTokens()) {
+    process_token(token);
+  }
+
+  return result;
+}
+
+auto BuildLexerAutomaton(const MetaInfo& info)
+    -> std::unique_ptr<const LexerAutomaton> {
+  auto joint_regex = PrepareRegexBatch(info);
+  return BuildDfaAutomaton(joint_regex);
+}
+
 }  // namespace RG::Lexer
