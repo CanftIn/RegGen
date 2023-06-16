@@ -1,10 +1,10 @@
 #ifndef REGGEN_COMMON_FLAT_SET_H
 #define REGGEN_COMMON_FLAT_SET_H
 
-#include <cstdint>
-#include <string>
 #include <cassert>
+#include <cstdint>
 #include <cstring>
+#include <string>
 
 namespace RG {
 
@@ -558,6 +558,43 @@ class FlatSet {
 
   Rep rep_;
 };
+
+template <typename Key, typename Compare = std::less<Key>>
+inline auto operator==(const FlatSet<Key>& lhs, const FlatSet<Key>& rhs)
+    -> bool {
+  return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <typename Key, typename Compare = std::less<Key>>
+inline auto operator!=(const FlatSet<Key>& lhs, const FlatSet<Key>& rhs)
+    -> bool {
+  return !(lhs == rhs);
+}
+
+template <typename Key, typename Compare = std::less<Key>>
+inline auto operator<(const FlatSet<Key>& lhs, const FlatSet<Key>& rhs)
+    -> bool {
+  return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(),
+                                      rhs.end(), Compare{});
+}
+
+template <typename Key, typename Compare = std::less<Key>>
+inline auto operator<=(const FlatSet<Key>& lhs, const FlatSet<Key>& rhs)
+    -> bool {
+  return !(lhs > rhs);
+}
+
+template <typename Key, typename Compare = std::less<Key>>
+inline auto operator>(const FlatSet<Key>& lhs, const FlatSet<Key>& rhs)
+    -> bool {
+  return rhs < lhs;
+}
+
+template <typename Key, typename Compare = std::less<Key>>
+inline auto operator>=(const FlatSet<Key>& lhs, const FlatSet<Key>& rhs)
+    -> bool {
+  return !(lhs < rhs);
+}
 
 }  // namespace RG
 
