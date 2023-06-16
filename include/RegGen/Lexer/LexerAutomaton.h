@@ -44,7 +44,7 @@ class LexerAutomaton : NonCopyable, NonMovable {
   SmallVector<std::unique_ptr<DfaState>> states_;
 };
 
-auto BuildLexingAutomaton(const MetaInfo& info)
+auto BuildLexerAutomaton(const MetaInfo& info)
     -> std::unique_ptr<const LexerAutomaton>;
 
 }  // namespace RG::Lexer

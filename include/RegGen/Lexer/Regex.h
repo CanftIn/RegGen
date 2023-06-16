@@ -31,18 +31,18 @@ auto ParseRegex(const std::string& regex) -> std::unique_ptr<RootExpr>;
 // auto ParseCharacter(const char*& str) -> int;
 
 enum class RepetitionMode : uint8_t {
-  Optional,
+  Optional, // * or +
   Star,
   Plus,
 };
 
 class RegexExprVisitor {
  public:
-  virtual void Visit(const RootExpr&) = 0;
-  virtual void Visit(const EntityExpr&) = 0;
-  virtual void Visit(const SequenceExpr&) = 0;
-  virtual void Visit(const ChoiceExpr&) = 0;
-  virtual void Visit(const ClosureExpr&) = 0;
+  virtual auto Visit(const RootExpr&) -> void = 0;
+  virtual auto Visit(const EntityExpr&) -> void = 0;
+  virtual auto Visit(const SequenceExpr&) -> void = 0;
+  virtual auto Visit(const ChoiceExpr&) -> void = 0;
+  virtual auto Visit(const ClosureExpr&) -> void = 0;
 };
 
 class RegexExpr {
@@ -61,9 +61,9 @@ class LabelExpr {
   virtual auto TestPassage(int c) const -> bool = 0;
 };
 
-class RootExpr : public RegexExpr, LabelExpr {
+class RootExpr : public RegexExpr, public LabelExpr {
  public:
-  explicit RootExpr(RegexExprPtr expr) : expr_(std::move(expr)) {}
+  RootExpr(RegexExprPtr expr) : expr_(std::move(expr)) {}
 
   auto Child() const -> const auto& { return expr_; }
 
@@ -79,7 +79,7 @@ class RootExpr : public RegexExpr, LabelExpr {
 
 class EntityExpr : public RegexExpr, public LabelExpr {
  public:
-  explicit EntityExpr(CharRange cg) : range_(cg) {}
+  EntityExpr(CharRange cg) : range_(cg) {}
 
   auto Range() const -> const auto& { return range_; }
 
@@ -95,8 +95,7 @@ class EntityExpr : public RegexExpr, public LabelExpr {
 
 class SequenceExpr : public RegexExpr {
  public:
-  explicit SequenceExpr(RegexExprVec exprs)
-      : exprs_(std::move(exprs)) {
+  SequenceExpr(RegexExprVec exprs) : exprs_(std::move(exprs)) {
     assert(!exprs_.empty());
   }
 
@@ -112,8 +111,7 @@ class SequenceExpr : public RegexExpr {
 
 class ChoiceExpr : public RegexExpr {
  public:
-  explicit ChoiceExpr(RegexExprVec exprs)
-      : exprs_(std::move(exprs)) {
+  ChoiceExpr(RegexExprVec exprs) : exprs_(std::move(exprs)) {
     assert(!exprs_.empty());
   }
 
