@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <string>
 
 namespace RG {
 
@@ -133,6 +134,11 @@ inline auto SkipWhitespace(const char*& s, bool toggle = true) -> void {
       halt = false;
     }
   }
+}
+
+inline auto RemoveQuote(const std::string& s) -> std::string {
+  assert(s.front() == '"' && s.back() == '"');
+  return s.substr(1, s.size() - 2);
 }
 
 }  // namespace RG
