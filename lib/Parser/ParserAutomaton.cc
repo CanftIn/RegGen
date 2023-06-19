@@ -65,7 +65,7 @@ auto EnumerateClosureItems(const MetaInfo& /*info*/, const ItemSet& kernel,
   auto to_be_visited = SmallVector<const VariableInfo*>{};
 
   const auto try_register_candidate = [&](const SymbolInfo* s) {
-    if (auto candidate = s->AsVariable(); candidate) {
+    if (const auto* candidate = s->AsVariable(); candidate) {
       if (added.count(candidate) == 0) {
         added.insert(candidate);
         to_be_visited.push_back(candidate);
@@ -116,7 +116,7 @@ auto ComputeGotoItems(const MetaInfo& info, const ItemSet& src,
 
 auto GenerateInitialItems(const MetaInfo& info) -> ItemSet {
   ItemSet result;
-  for (auto p : info.RootSymbol().Productions()) {
+  for (auto* p : info.RootSymbol().Productions()) {
     result.insert(ParserItem{p, 0});
   }
 
@@ -144,7 +144,7 @@ auto BootstrapParsingAutomaton(const MetaInfo& info) {
   for (std::deque<ItemSet> unprocessed{initial_set}; !unprocessed.empty();
        unprocessed.pop_front()) {
     const auto& src_items = unprocessed.front();
-    const auto src_state = pda->MakeState(src_items);
+    auto* const src_state = pda->MakeState(src_items);
 
     EnumerateSymbols(info, [&](const SymbolInfo* s) {
       // calculate the target state for symbol s
@@ -171,8 +171,8 @@ auto BootstrapParsingAutomaton(const MetaInfo& info) {
 
 auto LookupTargetState(const ParserState* src, const SymbolInfo* s)
     -> const ParserState* {
-  if (auto tok = s->AsToken(); tok) {
-    return get<PdaEdgeShift>(src->ActionMap().at(tok)).target;
+  if (const auto* tok = s->AsToken(); tok) {
+    return std::get<PdaEdgeShift>(src->ActionMap().at(tok)).target;
   } else {
     return src->GotoMap().at(s->AsVariable());
   }
@@ -195,19 +195,16 @@ auto CreateExtendedGrammar(const MetaInfo& info, ParserAutomaton& pda)
     // extend terms
     for (const auto& action_edge : state.ActionMap()) {
       const auto* tok_info = action_edge.first;
-      const auto* version = get<PdaEdgeShift>(action_edge.second).target;
+      const auto* version = std::get<PdaEdgeShift>(action_edge.second).target;
 
       builder.MakeTerminal(tok_info, version);
     }
   });
 
-  auto new_root = builder.MakeNonterminal(&info.RootVariable(), nullptr);
+  auto* new_root = builder.MakeNonterminal(&info.RootVariable(), nullptr);
 
-  // extend productions
   pda.EnumerateState([&](const ItemSet& items, ParserState& state) {
     EnumerateClosureItems(info, items, [&](ParserItem item) {
-      // NOTE we are only interested in non-kernel items(including intial state)
-      // to avoid repetition
       if (item.IsKernel()) {
         return;
       }
@@ -221,7 +218,8 @@ auto CreateExtendedGrammar(const MetaInfo& info, ParserAutomaton& pda)
         // TODO: remove hard-coded state id 0
 
         // exclude root nonterm because its version is set to nullptr
-        auto version = LookupTargetState(&state, production_info->Left());
+        const auto* version =
+            LookupTargetState(&state, production_info->Left());
         lhs = builder.MakeNonterminal(production_info->Left(), version);
       }
 
@@ -233,10 +231,10 @@ auto CreateExtendedGrammar(const MetaInfo& info, ParserAutomaton& pda)
         const auto* next_state = LookupTargetState(current_state, rhs_elem);
         assert(next_state != nullptr);
 
-        if (auto tok = rhs_elem->AsToken(); tok) {
+        if (const auto* tok = rhs_elem->AsToken(); tok) {
           rhs.push_back(builder.MakeTerminal(tok, next_state));
         } else {
-          auto var = rhs_elem->AsVariable();
+          const auto* var = rhs_elem->AsVariable();
 
           rhs.push_back(builder.MakeNonterminal(var, next_state));
         }
@@ -268,7 +266,6 @@ auto BuildLALRAutomaton(const MetaInfo& info)
     const auto& lhs = p->Left();
     const auto& rhs = p->Right();
 
-    // TODO: assumed production to be non-empty
     auto key = LocatedProduction{rhs.back()->Version(), p->Info()};
 
     // normalized ending
@@ -278,7 +275,7 @@ auto BuildLALRAutomaton(const MetaInfo& info)
 
     // normalized FOLLOW set
     auto& follow = merged_follow[key];
-    for (auto term : lhs->FollowSet()) {
+    for (auto* term : lhs->FollowSet()) {
       follow.insert(term->Info());
     }
   }
