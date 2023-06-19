@@ -5,7 +5,7 @@
 
 #include "RegGen/AST/ASTHandle.h"
 #include "RegGen/AST/ASTTypeProxy.h"
-#include "RegGen/Container/Array.h"
+#include "RegGen/Container/HeapArray.h"
 #include "RegGen/Container/SmallVector.h"
 #include "RegGen/Lexer/Regex.h"
 
@@ -14,7 +14,7 @@ namespace RG {
 class TypeInfo;
 class EnumTypeInfo;
 class BaseTypeInfo;
-class KlassTypeInfo;
+class ClassTypeInfo;
 
 class SymbolInfo;
 class TokenInfo;
@@ -51,26 +51,26 @@ class MetaInfo {
 
  private:
   using TypeInfoMap =
-      std::unordered_map<std::string, std::unique_ptr<TypeInfo>>;
+      std::unordered_map<std::string, TypeInfo*>;
   using SymbolInfoMap =
-      std::unordered_map<std::string, std::unique_ptr<SymbolInfo>>;
+      std::unordered_map<std::string, SymbolInfo*>;
 
-  const std::unique_ptr<AST::ASTTypeProxyManager> env_;
+  const AST::ASTTypeProxyManager* env_;
 
   TypeInfoMap type_lookup_;
-  Array<EnumTypeInfo, 0> enums_;
-  Array<BaseTypeInfo, 0> bases_;
-  Array<KlassTypeInfo, 0> classes_;
+  HeapArray<EnumTypeInfo> enums_;
+  HeapArray<BaseTypeInfo> bases_;
+  HeapArray<ClassTypeInfo> classes_;
 
   SymbolInfoMap symbol_lookup_;
-  Array<TokenInfo, 0> tokens_;
-  Array<TokenInfo, 0> ignored_tokens_;
-  Array<VariableInfo, 0> variables_;
-  Array<ProductionInfo, 0> productions_;
+  HeapArray<TokenInfo> tokens_;
+  HeapArray<TokenInfo> ignored_tokens_;
+  HeapArray<VariableInfo> variables_;
+  HeapArray<ProductionInfo> productions_;
 };
 
 auto ResolveParserInfo(const std::string& config,
-                       std::unique_ptr<AST::ASTTypeProxyManager> env)
+                       AST::ASTTypeProxyManager* env)
     -> std::unique_ptr<MetaInfo>;
 }  // namespace RG
 
