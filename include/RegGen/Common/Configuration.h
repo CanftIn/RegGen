@@ -1,7 +1,7 @@
 #ifndef REGGEN_COMMON_CONFIGURATION_H
 #define REGGEN_COMMON_CONFIGURATION_H
 
-#include "RegGen/Common/Definition.h"
+#include "RegGen/Common/TypeDefinition.h"
 
 namespace RG {
 
