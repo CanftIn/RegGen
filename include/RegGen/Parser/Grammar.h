@@ -3,6 +3,7 @@
 
 #include <map>
 #include <memory>
+#include <utility>
 
 #include "RegGen/Container/FlatSet.h"
 #include "RegGen/Container/SmallVector.h"
@@ -53,6 +54,16 @@ class Terminal : public Symbol {
 
 class Nonterminal : public Symbol {
  public:
+  Nonterminal(const VariableInfo* info, const ParserState* version)
+      : info_(info), Symbol(info, version) {}
+
+  auto Info() const -> const auto& { return info_; }
+  auto Productions() const -> const auto& { return productions_; }
+
+  auto MayProduceEpsilon() const -> const auto& { return may_produce_epsilon_; }
+  auto MayPreceedEof() const -> const auto& { return may_preceed_eof_; }
+  auto FirstSet() const -> const auto& { return first_set_; }
+  auto FollowSet() const -> const auto& { return follow_set_; }
 
  private:
   friend class GrammarBuilder;
@@ -61,6 +72,70 @@ class Nonterminal : public Symbol {
   SmallVector<Production*> productions_{};
 
   bool may_produce_epsilon_{false};
+  bool may_preceed_eof_{false};
+
+  TerminalSet first_set_ = {};
+  TerminalSet follow_set_ = {};
+};
+
+class Production {
+ public:
+  Production(const ProductionInfo* info, Nonterminal* lhs, SymbolVec rhs)
+      : info_(info), lhs_(lhs), rhs_(std::move(rhs)) {}
+
+  auto Info() const -> const auto& { return info_; }
+  auto Left() const -> const auto& { return lhs_; }
+  auto Right() const -> const auto& { return rhs_; }
+
+ private:
+  friend class GrammarBuilder;
+
+  const ProductionInfo* info_;
+
+  Nonterminal* lhs_;
+  SymbolVec rhs_;
+};
+
+class Grammar {
+ public:
+  auto RootSymbol() const -> const auto& { return root_symbol_; }
+  auto Terminals() const -> const auto& { return terms_; }
+  auto Nonterminals() const -> const auto& { return nonterms_; }
+  auto Productions() const -> const auto& { return productions_; }
+
+  auto LookupTerminal(SymbolKey key) -> Terminal*;
+  auto LookupNonterminal(SymbolKey key) -> Nonterminal*;
+
+ private:
+  friend class GrammarBuilder;
+
+  Nonterminal* root_symbol_;
+
+  std::map<SymbolKey, Terminal> terms_;
+  std::map<SymbolKey, Nonterminal> nonterms_;
+
+  std::vector<std::unique_ptr<Production>> productions_;
+};
+
+class GrammarBuilder {
+ public:
+  auto MakeTerminal(const TokenInfo* info, const ParserState* version)
+      -> Terminal*;
+  auto MakeNonterminal(const VariableInfo* info, const ParserState* version)
+      -> Nonterminal*;
+  auto MakeGenericSymbol(const SymbolInfo* info, const ParserState* version)
+      -> Symbol*;
+
+  auto CreateProduction(const ProductionInfo* info, Nonterminal* lhs,
+                        const SymbolVec& rhs) -> void;
+
+  auto Build(Nonterminal* root) -> std::unique_ptr<Grammar>;
+
+ private:
+  auto ComputeFirstSet() -> void;
+  auto ComputeFollowSet() -> void;
+
+  std::unique_ptr<Grammar> site_ = std::make_unique<Grammar>();
 };
 
 }  // namespace RG

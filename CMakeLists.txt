@@ -32,6 +32,7 @@ file(GLOB_RECURSE LIB_PATH
     ./lib/Common/*.cc
     ./lib/Container/*.cc
     ./lib/Lexer/*.cc
+    ./lib/Parser/*.cc
   )
 list(APPEND RegGen_SRCS ${LIB_PATH})
 
