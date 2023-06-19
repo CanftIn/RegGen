@@ -23,6 +23,14 @@ class ParserInternalError : std::runtime_error {
       : std::runtime_error(msg) {}
 };
 
+struct ConfigParsingError : std::runtime_error {
+  const char* pos;
+
+ public:
+  ConfigParsingError(const char* pos, const std::string& msg)
+      : runtime_error(msg), pos(pos) {}
+};
+
 }  // namespace RG
 
 #endif  // REGGEX_COMMON_ERROR_H

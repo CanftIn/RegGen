@@ -112,6 +112,29 @@ inline auto EscapeRawCharacter(int ch) -> int {
 
 inline auto IsEof(const char* s) -> bool { return *s == '\0'; }
 
+inline auto SkipWhitespace(const char*& s, bool toggle = true) -> void {
+  if (!toggle) {
+    return;
+  }
+
+  bool halt = false;
+  while (!halt) {
+    halt = true;
+
+    if (*s == '#') {
+      while (*s && *s != '\n') {
+        Consume(s);
+      }
+
+      halt = false;
+    }
+
+    while (ConsumeIfAny(s, " \r\n\t")) {
+      halt = false;
+    }
+  }
+}
+
 }  // namespace RG
 
 #endif  // REGGEN_COMMON_TEXT_H
