@@ -85,18 +85,8 @@ auto Format(const char* formatter, const Args&... args) -> std::string {
 }
 
 template <typename... Args>
-auto Format(const std::string& formatter, const Args&... args) -> std::string {
-  return Format(formatter.c_str(), args...);
-}
-
-template <typename... Args>
 auto PrintFormatted(const char* formatter, const Args&... args) -> void {
   Internal::FormatImpl(std::cout, formatter, args...);
-}
-
-template <typename... Args>
-auto PrintFormatted(const std::string& formatter, const Args&... args) -> void {
-  PrintFormatted(formatter.c_str(), args...);
 }
 
 }  // namespace RG

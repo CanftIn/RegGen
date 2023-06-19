@@ -7,7 +7,7 @@
 #include "RegGen/Lexer/Regex.h"
 #include "RegGen/Parser/TypeInfo.h"
 
-namespace RG::Lexer {
+namespace RG {
 
 struct DfaState {
   int id;
@@ -47,6 +47,6 @@ class LexerAutomaton : NonCopyable, NonMovable {
 auto BuildLexerAutomaton(const MetaInfo& info)
     -> std::unique_ptr<const LexerAutomaton>;
 
-}  // namespace RG::Lexer
+}  // namespace RG
 
 #endif  // REGGEN_LEXER_LEXER_AUTOMATON_H

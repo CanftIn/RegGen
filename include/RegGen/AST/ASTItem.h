@@ -15,7 +15,7 @@ class ASTItem {
   ASTItem() = default;
 
   template <typename T>
-  explicit ASTItem(const T& value) {
+  ASTItem(const T& value) {
     Assign(value);
   }
 

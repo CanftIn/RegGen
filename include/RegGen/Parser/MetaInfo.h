@@ -70,7 +70,7 @@ class MetaInfo {
 };
 
 auto ResolveParserInfo(const std::string& config,
-                       AST::ASTTypeProxyManager* env)
+                       const AST::ASTTypeProxyManager* env)
     -> std::unique_ptr<MetaInfo>;
 }  // namespace RG
 
