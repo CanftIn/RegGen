@@ -325,8 +325,8 @@ class MetaInfo::Builder {
   std::unique_ptr<MetaInfo> site_;
 };
 
-auto ResolveParsingInfo(const std::string& config,
-                        const AST::ASTTypeProxyManager* env)
+auto ResolveParserInfo(const std::string& config,
+                       const AST::ASTTypeProxyManager* env)
     -> std::unique_ptr<MetaInfo> {
   MetaInfo::Builder builder{};
 

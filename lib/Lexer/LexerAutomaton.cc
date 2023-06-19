@@ -11,7 +11,7 @@
 #include "RegGen/Container/SmallVector.h"
 #include "RegGen/Lexer/Regex.h"
 
-namespace RG::Lexer {
+namespace RG {
 
 using PositionLabel = const LabelExpr*;
 using PositionSet = FlatSet<PositionLabel>;
@@ -263,4 +263,4 @@ auto BuildLexerAutomaton(const MetaInfo& info)
   return BuildDfaAutomaton(joint_regex);
 }
 
-}  // namespace RG::Lexer
+}  // namespace RG
