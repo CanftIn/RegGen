@@ -141,6 +141,21 @@ inline auto RemoveQuote(const std::string& s) -> std::string {
   return s.substr(1, s.size() - 2);
 }
 
+inline auto EscapeCharacter(int ch) -> std::string {
+  switch (ch) {
+    case ' ':
+      return "<space>";
+    case '\t':
+      return "<\\t>";
+    case '\r':
+      return "<\\r>";
+    case '\n':
+      return "<\\n>";
+    default:
+      return std::string{static_cast<char>(ch)};
+  }
+}
+
 }  // namespace RG
 
 #endif  // REGGEN_COMMON_TEXT_H
