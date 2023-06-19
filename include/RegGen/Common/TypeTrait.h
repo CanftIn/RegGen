@@ -1,5 +1,5 @@
-#ifndef REGGEN_COMMON_TYPE_H
-#define REGGEN_COMMON_TYPE_H
+#ifndef REGGEN_COMMON_TYPE_TRAIT_H
+#define REGGEN_COMMON_TYPE_TRAIT_H
 
 #include <iterator>
 #include <type_traits>
@@ -282,4 +282,4 @@ using ::RG::operator&&;
 using ::RG::operator||;
 using ::RG::operator!;
 
-#endif  // REGGEN_COMMON_TYPE_H
+#endif  // REGGEN_COMMON_TYPE_TRAIT_H

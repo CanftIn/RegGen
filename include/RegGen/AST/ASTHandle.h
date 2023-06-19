@@ -15,7 +15,7 @@ namespace RG::AST {
 
 class ASTEnumGen {
  public:
-  explicit ASTEnumGen(int value) : value_(value) {}
+  ASTEnumGen(int value) : value_(value) {}
 
   auto Invoke(const ASTTypeProxy& proxy, Arena& /*arena*/,
               ArrayRef<ASTItem> /*rhs*/) const -> ASTItem {
@@ -52,7 +52,7 @@ class ASTOptionalGen {
 
 class ASTItemSelector {
  public:
-  explicit ASTItemSelector(int index) : index_(index) {}
+  ASTItemSelector(int index) : index_(index) {}
 
   auto Invoke(const ASTTypeProxy& /*proxy*/, Arena& /*arena*/,
               ArrayRef<ASTItem> rhs) const -> ASTItem {
@@ -77,7 +77,7 @@ class ASTObjectSetter {
     int symbol_index;
   };
 
-  explicit ASTObjectSetter(const SmallVector<SetterPair>& setters)
+  ASTObjectSetter(const SmallVector<SetterPair>& setters)
       : setters_(setters) {}
 
   void Invoke(const ASTTypeProxy& proxy, ASTItem obj,
@@ -93,7 +93,7 @@ class ASTObjectSetter {
 
 class ASTVectorMerger {
  public:
-  explicit ASTVectorMerger(const SmallVector<int>& indices)
+  ASTVectorMerger(const SmallVector<int>& indices)
       : indices_(indices) {}
 
   void Invoke(const ASTTypeProxy& proxy, ASTItem vec,

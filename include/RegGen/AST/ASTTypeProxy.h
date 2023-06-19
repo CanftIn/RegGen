@@ -7,8 +7,8 @@
 #include "RegGen/AST/ASTBasic.h"
 #include "RegGen/AST/ASTItem.h"
 #include "RegGen/AST/ASTTypeTrait.h"
-#include "RegGen/Container/Arena.h"
 #include "RegGen/Common/Error.h"
+#include "RegGen/Container/Arena.h"
 
 namespace RG::AST {
 
@@ -100,10 +100,10 @@ class BasicASTTypeProxy final : public ASTTypeProxy {
 
 class ASTTypeProxyManager {
  public:
-  auto Lookup(const std::string& name) const -> const ASTTypeProxy& {
+  auto Lookup(const std::string& name) const -> const ASTTypeProxy* {
     auto it = proxies_.find(name);
     if (it != proxies_.end()) {
-      return *it->second;
+      return it->second.get();
     } else {
       throw ParserInternalError{
           "ASTTypeProxyManager: Specific type proxy not found."};

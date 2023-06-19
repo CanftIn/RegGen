@@ -1,5 +1,5 @@
-#ifndef REGGEN_COMMON_DEFINITION_H
-#define REGGEN_COMMON_DEFINITION_H
+#ifndef REGGEN_COMMON_TYPE_DEFINITION_H
+#define REGGEN_COMMON_TYPE_DEFINITION_H
 
 #include <memory>
 #include <optional>
@@ -17,7 +17,7 @@ struct QualType {
 };
 
 struct TokenDefinition {
-  std::string id;
+  std::string name;
   std::string regex;
 };
 
@@ -61,4 +61,4 @@ struct RuleDefinition {
 
 }  // namespace RG
 
-#endif  // REGGEN_COMMON_DEFINITION_H
+#endif  // REGGEN_COMMON_TYPE_DEFINITION_H

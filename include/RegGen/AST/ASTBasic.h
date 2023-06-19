@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "RegGen/Common/Error.h"
-#include "RegGen/Common/Type.h"
+#include "RegGen/Common/TypeTrait.h"
 #include "RegGen/Container/SmallVector.h"
 
 namespace RG::AST {

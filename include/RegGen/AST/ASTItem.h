@@ -6,7 +6,7 @@
 
 #include "RegGen/AST/ASTBasic.h"
 #include "RegGen/AST/ASTTypeTrait.h"
-#include "RegGen/Common/Type.h"
+#include "RegGen/Common/TypeTrait.h"
 
 namespace RG::AST {
 
