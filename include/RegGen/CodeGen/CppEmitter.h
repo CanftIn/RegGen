@@ -2,8 +2,10 @@
 #define REGGEN_CODEGEN_CPP_EMITTER_H
 
 #include <functional>
-#include <string>
 #include <sstream>
+#include <string>
+
+#include "RegGen/Common/Format.h"
 
 namespace RG {
 
@@ -25,7 +27,10 @@ class CppEmitter {
   auto ToString() -> std::string;
 
   template <typename... Args>
-  auto WriteLine(const char* fmt, const Args&... args) -> void;
+  auto WriteLine(const char* fmt, const Args&... args) -> void {
+    WriteIndent();
+    buffer_ << Format(fmt, args...) << std::endl;
+  }
 
  private:
   auto WriteIndent() -> void;

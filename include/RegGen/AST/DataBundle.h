@@ -18,7 +18,7 @@ class DataBundle {
 
   template <int Ordinal>
   auto GetItem() -> const auto& {
-    static_assert(false);
+    //static_assert(false);
     return BasicASTObject();
   }
 };

@@ -30,6 +30,7 @@ set(STATIC_LIB_NAME ${PROJECT_NAME})
 
 file(GLOB_RECURSE LIB_PATH
     ./lib/Common/*.cc
+    ./lib/CodeGen/*.cc
     ./lib/Container/*.cc
     ./lib/Lexer/*.cc
     ./lib/Parser/*.cc

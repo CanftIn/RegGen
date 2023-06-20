@@ -17,7 +17,7 @@ struct LocationInfo {
 
 class ASTNodeBase {
  public:
-  explicit ASTNodeBase(int offset = -1, int length = -1)
+  ASTNodeBase(int offset = -1, int length = -1)
       : offset_(offset), length_(length) {}
 
   auto Offset() const -> const auto& { return offset_; }
@@ -113,7 +113,7 @@ class ASTOptional : public ASTNodeBase {
 
   ASTOptional() = default;
 
-  explicit ASTOptional(const ElementType& value)
+  ASTOptional(const ElementType& value)
       : ASTNodeBase(value.Offset(), value.Length()), value_(value) {}
 
   auto HasValue() const -> bool { return value_.IsValid(); }
@@ -134,7 +134,7 @@ class ASTOptional<T*> : public ASTNodeBase {
 
   ASTOptional() = default;
 
-  explicit ASTOptional(const ElementType& obj)
+  ASTOptional(const ElementType& obj)
       : ASTNodeBase(obj->Offset(), obj->Length()), value_(obj) {}
 
   auto HasValue() const -> bool { return value_ != nullptr; }

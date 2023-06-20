@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 
+include_directories(.)
+
 file(GLOB DRIVER_LIST *.cc)
 
 foreach(FILE_PATH ${DRIVER_LIST})
