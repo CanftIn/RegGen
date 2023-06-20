@@ -58,7 +58,7 @@ class BasicASTTypeProxy final : public ASTTypeProxy {
   using TraitType = ASTTypeTrait<T>;
 
   using SelfType = typename TraitType::SelfType;
-  using StoreType = typename TraitType::StoreType;
+  using StorageType = typename TraitType::StorageType;
   using VectorType = typename TraitType::VectorType;
   using OptionalType = typename TraitType::OptionalType;
 
@@ -94,7 +94,7 @@ class BasicASTTypeProxy final : public ASTTypeProxy {
   }
 
   auto PushBackElement(ASTItem vec, ASTItem elem) const -> void override {
-    vec.Extract<VectorType*>()->PushBack(elem.Extract<StoreType>());
+    vec.Extract<VectorType*>()->PushBack(elem.Extract<StorageType>());
   }
 };
 

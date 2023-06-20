@@ -97,7 +97,7 @@ template <typename T>
 class BasicParser {
  public:
   using Ptr = std::unique_ptr<BasicParser>;
-  using ResultType = typename AST::ASTTypeTrait<T>::StoreType;
+  using ResultType = typename AST::ASTTypeTrait<T>::StorageType;
 
   auto Parse(Arena& arena, const std::string& data) -> ResultType {
     auto result = parser_->Parse(arena, data);

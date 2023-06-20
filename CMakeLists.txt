@@ -42,3 +42,5 @@ add_library(${STATIC_LIB_NAME} STATIC ${RegGen_SRCS})
 if (REGGEN_OPT_BUILD_UNITTESTS)
   add_subdirectory(unittests #[[EXCLUDE_FROM_ALL]])
 endif()
+
+add_subdirectory(Driver)
