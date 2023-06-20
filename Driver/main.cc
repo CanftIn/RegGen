@@ -8,7 +8,7 @@
 #include "RegGen/RegGenInclude.h"
 
 auto LoadConfigText() -> std::string {
-  std::fstream file{"d:\\lang.loli.txt"};
+  std::fstream file{"../lang_define.txt"};
   return std::string(std::istreambuf_iterator<char>{file}, {});
 }
 
